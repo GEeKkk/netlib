@@ -2,6 +2,7 @@
 #define EVENTLOOP_H
 
 #include "netlib/base/noncopyable.h"
+#include "netlib/base/CurrentThread.h"
 #include <thread>
 #include <atomic>
 
@@ -11,7 +12,19 @@ public:
     EventLoop();
     ~EventLoop();
 
-    void loop();
+    void Loop();
+
+    void AssertInLoopThread() {
+        if (!IsInLoopThread()) {
+            AbortNotInLoopThread();
+        }
+    }
+
+    bool IsInLoopThread() const {
+        return m_threadId == CurrentThread::tid();
+    }
+private:
+    void AbortNotInLoopThread();
 private:
     std::atomic_bool m_looping;
     const pid_t m_threadId;
