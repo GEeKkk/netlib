@@ -22,7 +22,7 @@ Channel::Channel(EventLoop* loop, int fd)
 }
 
 void Channel::Update() {
-
+    m_loop->UpdateChannel(this);
 }
 
 void Channel::HandleEvent() {

@@ -1,12 +1,18 @@
 #include "EventLoop.h"
+#include "Poller.h"
+#include "Channel.h"
+
 #include "netlib/base/Logging.h"
 #include <poll.h>
 
 __thread EventLoop* t_loopInThisThread = NULL;
+const int kPollTimeMs = 10000;
 
 EventLoop::EventLoop() 
     : m_looping(false),
-      m_threadId(CurrentThread::tid())
+      m_quit(false),
+      m_threadId(CurrentThread::tid()),
+      m_poller(std::make_unique<Poller>(this))
 {
     LOG_DEBUG << "EventLoop created [" << this << "] in thread [" << m_threadId << "]";
     if (t_loopInThisThread) {
@@ -26,11 +32,31 @@ void EventLoop::Loop()
 {
     AssertInLoopThread();
     m_looping = true;
-    
-    ::poll(NULL, 0, 5 * 1000);
+    m_quit = false;
 
-    LOG_DEBUG << "EventLoop [" << this << "] stop looping";
-    m_looping = false;
+    while (!m_quit)
+    {
+        m_activeChans.clear();
+        m_poller->Poll(kPollTimeMs, &m_activeChans);
+
+        for (auto& it : m_activeChans) {
+            it->HandleEvent();
+        }
+
+        LOG_DEBUG << "EventLoop [" << this << "] stop looping";
+        m_looping = false;
+    }
+}
+
+void EventLoop::Quit() 
+{
+    m_quit = true;
+}
+
+void EventLoop::UpdateChannel(Channel* chan)
+{
+    AssertInLoopThread();
+    m_poller->UpdateChannel(chan);
 }
 
 void EventLoop::AbortNotInLoopThread()

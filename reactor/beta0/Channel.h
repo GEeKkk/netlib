@@ -76,7 +76,6 @@ private:
     EventCallback m_ReadCallback;
     EventCallback m_WriteCallback;
     EventCallback m_ErrorCallback;
-
 };
 
 #endif // CHANNEL_H

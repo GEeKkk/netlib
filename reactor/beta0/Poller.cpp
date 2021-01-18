@@ -53,5 +53,23 @@ void Poller::FillActiveChannels(int kEvents,
 void Poller::UpdateChannel(Channel* chan)
 {
     AssertInLoopThread();
-    LOG_TRACE << "fd = " << chan->GetFd() << ""
+    LOG_TRACE << "fd = " << chan->GetFd() << " events = " << chan->GetEvents();
+    if (chan->GetIndex() < 0) {
+        struct pollfd pfd;
+        pfd.fd = chan->GetFd();
+        pfd.events = static_cast<short>(chan->GetEvents());
+        pfd.revents = 0;
+        m_Pollfds.emplace_back(pfd);
+        int tmpidx = static_cast<int>(m_Pollfds.size()) - 1;
+        chan->SetIndex(tmpidx);
+        m_Channels[pfd.fd] = chan;
+    } else {
+        int idx = chan->GetIndex();
+        struct pollfd& pfd = m_Pollfds[idx];
+        pfd.events = static_cast<short>(chan->GetEvents());
+        pfd.revents = 0;
+        if (chan->IsNoneEvent()) {
+            pfd.fd = -1;
+        }
+    }
 }

@@ -37,7 +37,6 @@ private:
     EventLoop* m_OwnerLoop;
     PollFdList m_Pollfds;
     ChanMap m_Channels;
-
 };
 
 
