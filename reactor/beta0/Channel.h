@@ -4,6 +4,7 @@
 #include <functional>
 #include "netlib/base/noncopyable.h"
 
+// 前置声明
 class EventLoop;
 
 class Channel : noncopyable
