@@ -1,6 +1,7 @@
 #include "EventLoop.h"
 #include "Poller.h"
 #include "Channel.h"
+#include "TimerQueue.h"
 
 #include "netlib/base/Logging.h"
 #include <poll.h>
@@ -12,7 +13,8 @@ EventLoop::EventLoop()
     : m_looping(false),
       m_quit(false),
       m_threadId(CurrentThread::tid()),
-      m_poller(std::make_unique<Poller>(this))
+      m_poller(std::make_unique<Poller>(this)),
+      m_TimerQueue(std::make_unique<TimerQueue>(this))
 {
     LOG_DEBUG << "EventLoop created [" << this << "] in thread [" << m_threadId << "]";
     if (t_loopInThisThread) {
@@ -51,6 +53,23 @@ void EventLoop::Loop()
 void EventLoop::Quit() 
 {
     m_quit = true;
+}
+
+TimerId EventLoop::RunAt(const Timestamp& time, const TimerCallback& cb)
+{
+    return m_TimerQueue->AddTimer(cb, time, 0.0);
+}
+
+TimerId EventLoop::RunAfter(double delay, const TimerCallback& cb) 
+{
+    Timestamp time(addTime(Timestamp::now(), delay));
+    return RunAt(time, cb);
+}
+
+TimerId EventLoop::RunEvery(double interval, const TimerCallback& cb)
+{
+    Timestamp time(addTime(Timestamp::now(), interval));
+    return m_TimerQueue->AddTimer(cb, time, interval);
 }
 
 void EventLoop::UpdateChannel(Channel* chan)
