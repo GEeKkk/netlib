@@ -1,86 +1,51 @@
 #include "EventLoop.h"
-#include "Poller.h"
-#include "Channel.h"
-#include "TimerQueue.h"
 
+#include "netlib/base/CurrentThread.h"
 #include "netlib/base/Logging.h"
+
 #include <poll.h>
 
-__thread EventLoop* t_loopInThisThread = NULL;
-const int kPollTimeMs = 10000;
+using namespace muduo;
 
-EventLoop::EventLoop() 
-    : m_looping(false),
-      m_quit(false),
-      m_threadId(CurrentThread::tid()),
-      m_poller(std::make_unique<Poller>(this)),
-      m_TimerQueue(std::make_unique<TimerQueue>(this))
+__thread EventLoop* t_loopInCurrentThread = nullptr;
+
+EventLoop::EventLoop()
+        : m_looping(false),
+          m_threadId(CurrentThread::tid())
 {
-    LOG_DEBUG << "EventLoop created [" << this << "] in thread [" << m_threadId << "]";
-    if (t_loopInThisThread) {
-        LOG_FATAL << "Another EventLoop " << t_loopInThisThread 
-                  << " exists in current thread [" << m_threadId << "]";
+    LOG_TRACE << "EventLoop created [" << this << "] in thread (" << m_threadId << ")";
+    /// 每个线程只能有一个eventloop, 
+    /// 创建之前需要检查是否已经创建了其他loop对象
+    if (t_loopInCurrentThread) {
+        LOG_FATAL << "Another EventLoop [" << t_loopInCurrentThread 
+                  << "] exists in this thread (" << m_threadId << ")";
     } else {
-        t_loopInThisThread = this;
+        t_loopInCurrentThread = this;
     }
 }
 
-EventLoop::~EventLoop()
-{
-    t_loopInThisThread = NULL;
+EventLoop::~EventLoop() {
+    t_loopInCurrentThread = nullptr;
 }
 
-void EventLoop::Loop()
-{
-    AssertInLoopThread();
+void EventLoop::Loop() {
+    CheckInLoopThread();
     m_looping = true;
-    m_quit = false;
+    ::poll(NULL, 0, 5 * 1000);
 
-    while (!m_quit)
-    {
-        m_activeChans.clear();
-        m_poller->Poll(kPollTimeMs, &m_activeChans);
-
-        for (auto& it : m_activeChans) {
-            it->HandleEvent();
-        }
-
-        LOG_DEBUG << "EventLoop [" << this << "] stop looping";
-        m_looping = false;
-    }
+    LOG_DEBUG << "EventLoop [" << this << "] stop looping.";
+    m_looping = false;
+}
+void EventLoop::CheckInLoopThread() {
+     if (!IsInLoopThread()) {
+         AbortNotInLoopThread();
+     }
+}
+bool EventLoop::IsInLoopThread() const {
+    return m_threadId == CurrentThread::tid();
 }
 
-void EventLoop::Quit() 
-{
-    m_quit = true;
-}
-
-TimerId EventLoop::RunAt(const Timestamp& time, const TimerCallback& cb)
-{
-    return m_TimerQueue->AddTimer(cb, time, 0.0);
-}
-
-TimerId EventLoop::RunAfter(double delay, const TimerCallback& cb) 
-{
-    Timestamp time(addTime(Timestamp::now(), delay));
-    return RunAt(time, cb);
-}
-
-TimerId EventLoop::RunEvery(double interval, const TimerCallback& cb)
-{
-    Timestamp time(addTime(Timestamp::now(), interval));
-    return m_TimerQueue->AddTimer(cb, time, interval);
-}
-
-void EventLoop::UpdateChannel(Channel* chan)
-{
-    AssertInLoopThread();
-    m_poller->UpdateChannel(chan);
-}
-
-void EventLoop::AbortNotInLoopThread()
-{
-  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
-            << " was created in m_threadId = " << m_threadId
-            << ", current thread id = " <<  CurrentThread::tid();
+void EventLoop::AbortNotInLoopThread() {
+    LOG_FATAL << "EventLoop Abort. Created in thread(" << m_threadId 
+              << "), but current thread is (" << CurrentThread::tid() << ")";
 }

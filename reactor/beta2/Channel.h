@@ -4,6 +4,8 @@
 #include <functional>
 #include "netlib/base/noncopyable.h"
 
+#include "netlib/base/Logging.h"
+
 // 前置声明
 class EventLoop;
 
@@ -17,6 +19,7 @@ public:
     void HandleEvent();
     
     void SetReadCallback(const EventCallback& cb) {
+                LOG_DEBUG << "SetReadCallback";
         m_ReadCallback = cb;
     }
 

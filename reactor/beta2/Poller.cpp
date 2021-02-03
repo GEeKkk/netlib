@@ -18,11 +18,13 @@ Poller::~Poller()
 Timestamp Poller::Poll(int timeoutMs, ChannelList* activeChans)
 {
     // 返回就绪事件
+    LOG_DEBUG << "Start Polling";
     int kEvents = ::poll(m_Pollfds.data(), m_Pollfds.size(), timeoutMs);
+    LOG_DEBUG << "Stop Polling";
     Timestamp now(Timestamp::now());
 
     if (kEvents > 0) {
-        LOG_TRACE << kEvents << " events happended";
+        LOG_DEBUG << kEvents << " events happended";
         FillActiveChannels(kEvents, activeChans);
     } else if (kEvents == 0) {
         LOG_TRACE <<  " nothing happended";
