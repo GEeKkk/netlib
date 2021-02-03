@@ -13,7 +13,7 @@ EventLoop::EventLoop()
         : m_looping(false),
           m_threadId(CurrentThread::tid())
 {
-    LOG_TRACE << "EventLoop created [" << this << "] in thread (" << m_threadId << ")";
+    LOG_DEBUG << "EventLoop created [" << this << "] in thread (" << m_threadId << ")";
     /// 每个线程只能有一个eventloop, 
     /// 创建之前需要检查是否已经创建了其他loop对象
     if (t_loopInCurrentThread) {
@@ -29,6 +29,7 @@ EventLoop::~EventLoop() {
 }
 
 void EventLoop::Loop() {
+    // 事件循环必须在IO线程中执行，pre-condition
     CheckInLoopThread();
     m_looping = true;
     ::poll(NULL, 0, 5 * 1000);
