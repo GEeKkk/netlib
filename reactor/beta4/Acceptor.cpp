@@ -41,3 +41,8 @@ void Acceptor::HandleRead() {
 void Acceptor::SetNewConnectionHandler(const NewConnectionHandler& cb) {
     m_newConnHandler = cb;
 }
+
+
+bool Acceptor::IsListening() const {
+    return m_listening;
+}

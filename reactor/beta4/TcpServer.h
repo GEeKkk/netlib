@@ -3,9 +3,9 @@
 
 #include "Handler.h"
 #include "TcpConnection.h"
+#include "netlib/base/noncopyable.h"
 
 #include <map>
-#include "netlib/base/noncopyable.h"
 #include <memory>
 
 class Acceptor;

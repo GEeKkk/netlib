@@ -31,7 +31,17 @@ void TcpServer::Start() {
         m_IsStarted = true;
     }
 
-    // if (!)
+    if (!m_Acceptor->IsListening()) {
+        m_loop->RunInLoop(std::bind(&Acceptor::Listen, m_Acceptor.get()));
+    }
+}
+
+void TcpServer::SetConnHandler(const ConnectionHandler& hd) {
+    m_ConnHandler = hd;
+}
+
+void TcpServer::SetMsgHandler(const MessageHandler& hd) {
+    m_MsgHandler = hd;
 }
 
 void TcpServer::NewConnection(int sockfd, const NetAddr& peerAddr) {
