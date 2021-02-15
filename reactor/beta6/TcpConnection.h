@@ -2,8 +2,10 @@
 #define TCPCONNECTION_H
 
 #include "netlib/base/noncopyable.h"
+#include "netlib/base/Timestamp.h"
 #include "NetAddr.h"
 #include "Handler.h"
+#include "Buffer.h"
 
 #include <memory>
 
@@ -46,21 +48,27 @@ private:
     };
 private:
     void SetTcpState(TcpState ts);
-    void HandleRead();
+
+    void HandleRead(muduo::Timestamp recvTime);
     void HandleWrite();
     void HandleError();
     void HandleClose();
 private:
     EventLoop* m_loop;
+
     std::string m_name;
     TcpState m_state;
     std::unique_ptr<Socket> m_pSocket;
     std::unique_ptr<Channel> m_pChan;
+
     NetAddr m_localAddr;
     NetAddr m_peerAddr;
+
     ConnectionHandler m_connHandler;
     MessageHandler m_msgHandler;
     CloseHandler m_closeHandler;
+
+    muduo::Buffer m_inputBuffer;
 };
 
 #endif // TCPCONNECTION_H

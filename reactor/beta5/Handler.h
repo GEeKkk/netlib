@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <functional>
+#include "Buffer.h"
 
 class TcpConnection;
 
@@ -10,7 +11,7 @@ using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 
 using ConnectionHandler = std::function<void(const TcpConnectionPtr&)>;
 using MessageHandler = std::function<void(const TcpConnectionPtr&,
-                                          const char* data,
+                                          
                                           ssize_t len)>;
 using CloseHandler = std::function<void(const TcpConnectionPtr&)>;
 

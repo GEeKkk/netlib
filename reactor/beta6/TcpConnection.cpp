@@ -11,6 +11,7 @@
 #include <stdio.h>
 
 using namespace muduo;
+using namespace std::placeholders;
 
 TcpConnection::TcpConnection(EventLoop* loop,
                              const std::string& name,
@@ -28,7 +29,11 @@ TcpConnection::TcpConnection(EventLoop* loop,
     LOG_DEBUG << "TcpConnection::ctor[" << m_name << "] at " << this
               << " fd = " << sockfd;
     
-    m_pChan->SetReadCallback(std::bind(&TcpConnection::HandleRead, this));
+    m_pChan->SetReadCallback(std::bind(&TcpConnection::HandleRead, this, _1));
+    m_pChan->SetWriteCallback(std::bind(&TcpConnection::HandleWrite, this));
+    m_pChan->SetCloseCallback(std::bind(&TcpConnection::HandleClose, this));
+    m_pChan->SetErrorCallback(std::bind(&TcpConnection::HandleError, this));
+
 }
 
 TcpConnection::~TcpConnection() {
@@ -55,16 +60,22 @@ void TcpConnection::ConnectDestroyed() {
     m_loop->RemoveChannel(m_pChan.get());
 }
 
-void TcpConnection::HandleRead() {
-    char buf[66535];
-    auto n = ::read(m_pChan->GetFd(), buf, sizeof(buf));
+void TcpConnection::HandleRead(muduo::Timestamp recvTime) {
+    int savedErrno = 0;
+    ssize_t n = m_inputBuffer.readFd(m_pChan->GetFd(), &savedErrno);
     if (n > 0) {
-        m_msgHandler(shared_from_this(), buf, n);
+        m_msgHandler(shared_from_this(), &m_inputBuffer, recvTime);
     } else if (n == 0) {
         HandleClose();
     } else {
+        errno = savedErrno;
+        LOG_SYSERR << "TcpConnection::HandleRead";
         HandleError();
     }
+}
+
+void TcpConnection::HandleWrite() {
+    
 }
 
 void TcpConnection::HandleError() {

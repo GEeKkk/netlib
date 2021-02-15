@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <functional>
+#include "Buffer.h"
+#include "netlib/base/Timestamp.h"
 
 class TcpConnection;
 
@@ -10,8 +12,8 @@ using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 
 using ConnectionHandler = std::function<void(const TcpConnectionPtr&)>;
 using MessageHandler = std::function<void(const TcpConnectionPtr&,
-                                          const char* data,
-                                          ssize_t len)>;
+                                          muduo::Buffer* buf,
+                                          muduo::Timestamp)>;
 using CloseHandler = std::function<void(const TcpConnectionPtr&)>;
 
 #endif // HANDLER_H

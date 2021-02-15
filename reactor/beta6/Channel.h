@@ -3,17 +3,18 @@
 
 #include <functional>
 #include "netlib/base/noncopyable.h"
-
+#include "netlib/base/Timestamp.h"
 class EventLoop;
 
 class Channel : noncopyable
 {
 public:
     using EventCallback = std::function<void()>;
+    using ReadEventCallback = std::function<void(muduo::Timestamp)>;
 public:
     Channel(EventLoop* loop, int fd);
-    void HandleEvent();
-    void SetReadCallback(const EventCallback& cb);
+    void HandleEvent(muduo::Timestamp recvTime);
+    void SetReadCallback(const ReadEventCallback& cb);
     void SetWriteCallback(const EventCallback& cb);
     void SetErrorCallback(const EventCallback& cb);
     void SetCloseCallback(const EventCallback& cb);
@@ -45,7 +46,7 @@ private:
     bool m_eventHandling;
 
 private:
-    EventCallback m_ReadCallback;
+    ReadEventCallback m_ReadCallback;
     EventCallback m_WriteCallback;
     EventCallback m_ErrorCallback;
     EventCallback m_CloseCallback;

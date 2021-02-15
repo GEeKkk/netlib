@@ -21,7 +21,7 @@ Channel::Channel(EventLoop* loop, int fd)
 {
 }
 
-void Channel::SetReadCallback(const EventCallback& cb) {
+void Channel::SetReadCallback(const ReadEventCallback& cb) {
     m_ReadCallback = cb;
 }
 
@@ -80,7 +80,7 @@ EventLoop* Channel::OwnerLoop() {
 }
 
 
-void Channel::HandleEvent() {
+void Channel::HandleEvent(muduo::Timestamp recvTime) {
     m_eventHandling = true;
 
     if (m_revents & POLLNVAL) {
@@ -102,7 +102,7 @@ void Channel::HandleEvent() {
 
     if (m_revents & (POLLIN | POLLPRI | POLLRDHUP)) {
         if (m_ReadCallback) {
-            m_ReadCallback();
+            m_ReadCallback(recvTime);
         }
     }
 
