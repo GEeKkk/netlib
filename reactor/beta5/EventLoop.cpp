@@ -88,6 +88,11 @@ void EventLoop::UpdateChannel(Channel* channel) {
     m_poller->UpdateChannel(channel);
 }
 
+void EventLoop::RemoveChannel(Channel* channel) {
+    CheckInLoopThread();
+    m_poller->RemoveChannel(channel);
+}
+
 
 void EventLoop::CheckInLoopThread() {
      if (!IsInLoopThread()) {

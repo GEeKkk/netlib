@@ -23,6 +23,7 @@ public:
     muduo::Timestamp Poll(int TimeoutMs, ChanVec& ActiveChannels);
 
     void UpdateChannel(Channel* channel);
+    void RemoveChannel(Channel* channel);
 
     void CheckInLoopThread();
     

@@ -66,5 +66,15 @@ void TcpServer::NewConnection(int sockfd, const NetAddr& peerAddr) {
     m_ConnMap[connName] = connPtr;
     connPtr->SetConnectionHandler(m_ConnHandler);
     connPtr->SetMessageHandler(m_MsgHandler);
+    connPtr->SetCloseHandler(std::bind(&TcpServer::RemoveConnection, this, _1));
     connPtr->ConnectEstablished();
+}
+
+void TcpServer::RemoveConnection(const TcpConnectionPtr& connPtr) {
+    m_loop->CheckInLoopThread();
+    LOG_DEBUG << "TcpServer::RemoveConnection [" << m_name << "] - connection " << connPtr->GetName();
+    
+    m_ConnMap.erase(connPtr->GetName());
+
+    m_loop->queueInLoop(std::bind(&TcpConnection::ConnectDestroyed, connPtr));
 }

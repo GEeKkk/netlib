@@ -16,8 +16,10 @@ public:
     void SetReadCallback(const EventCallback& cb);
     void SetWriteCallback(const EventCallback& cb);
     void SetErrorCallback(const EventCallback& cb);
+    void SetCloseCallback(const EventCallback& cb);
 
     void EnableRead();
+    void DisableAll();
 
     int GetFd() const;
     int GetEvents() const;
@@ -40,10 +42,13 @@ private:
     int m_revents;
     int m_index;
 
+    bool m_eventHandling;
+
 private:
     EventCallback m_ReadCallback;
     EventCallback m_WriteCallback;
     EventCallback m_ErrorCallback;
+    EventCallback m_CloseCallback;
 
     static const int kNoneEvent;
     static const int kReadEvent;

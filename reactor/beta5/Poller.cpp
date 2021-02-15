@@ -2,6 +2,7 @@
 
 #include "Channel.h"
 #include "netlib/base/Logging.h"
+// #include "netlib/base/Common.h"
 
 #include <poll.h>
 
@@ -70,7 +71,28 @@ void Poller::UpdateChannel(Channel* channel) {
         pfd.events = static_cast<short>(channel->GetEvents());
         pfd.revents = 0;
         if (channel->IsNoneEvent()) {
-            pfd.fd = -1;
+            pfd.fd = -channel->GetFd() - 1;
         }
+    }
+}
+
+void Poller::RemoveChannel(Channel* chan) {
+    CheckInLoopThread();
+    LOG_DEBUG << "fd = " << chan->GetFd();
+
+    int idx = chan->GetIndex();
+
+    size_t n = m_chanmap.erase(chan->GetFd());
+
+    if (implicit_cast<size_t>(idx) == m_pollfds.size() - 1) {
+        m_pollfds.pop_back();
+    } else {
+        int fd = m_pollfds.back().fd;
+        std::iter_swap(m_pollfds.begin() + idx, m_pollfds.end() - 1);
+        if (fd < 0) {
+            fd = -fd - 1;
+        }
+        m_chanmap[fd]->SetIndex(idx);
+        m_pollfds.pop_back();
     }
 }

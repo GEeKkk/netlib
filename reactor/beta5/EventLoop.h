@@ -25,6 +25,7 @@ public:
     void Quit();
 
     void UpdateChannel(Channel* channel);
+    void RemoveChannel(Channel* channel);
 
     void CheckInLoopThread();
 

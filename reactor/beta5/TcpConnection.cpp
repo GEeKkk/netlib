@@ -5,6 +5,7 @@
 #include "EventLoop.h"
 #include "Socket.h"
 #include "NetAddr.h"
+#include "SocketUtil.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -41,13 +42,43 @@ void TcpConnection::ConnectEstablished() {
 
     SetTcpState(kConnected);
     m_pChan->EnableRead();
-    ConnectionHandler(shared_from_this());
+    m_connHandler(shared_from_this());
+}
+
+void TcpConnection::ConnectDestroyed() {
+    m_loop->CheckInLoopThread();
+
+    SetTcpState(kDisconnected);
+    m_pChan->DisableAll();
+    m_connHandler(shared_from_this());
+
+    m_loop->RemoveChannel(m_pChan.get());
 }
 
 void TcpConnection::HandleRead() {
     char buf[66535];
     auto n = ::read(m_pChan->GetFd(), buf, sizeof(buf));
-    m_msgHandler(shared_from_this(), buf, n);
+    if (n > 0) {
+        m_msgHandler(shared_from_this(), buf, n);
+    } else if (n == 0) {
+        HandleClose();
+    } else {
+        HandleError();
+    }
+}
+
+void TcpConnection::HandleError() {
+    int err = SocketUtil::getSocketError(m_pChan->GetFd());
+    LOG_ERROR << "TcpConnection::HandleError [" << m_name 
+              << "] - SO_ERROR = " << err << " " << strerror_tl(err);
+}
+
+
+void TcpConnection::HandleClose() {
+    m_loop->CheckInLoopThread();
+    LOG_DEBUG << "TcpConnection::HandleClose state = " << m_state;
+    m_pChan->DisableAll();
+    m_closeHandler(shared_from_this());
 }
 
 EventLoop* TcpConnection::GetLoop() const {
@@ -76,6 +107,10 @@ void TcpConnection::SetConnectionHandler(const ConnectionHandler& hd) {
 
 void TcpConnection::SetMessageHandler(const MessageHandler& hd) {
     m_msgHandler = hd;
+}
+
+void TcpConnection::SetCloseHandler(const CloseHandler& hd) {
+    m_closeHandler = hd;
 }
 
 void TcpConnection::SetTcpState(TcpState ts) {
