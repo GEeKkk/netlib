@@ -2,6 +2,7 @@
 #include "EventLoop.h"
 #include "NetAddr.h"
 #include "Handler.h"
+#include "Buffer.h"
 
 #include <stdio.h>
 
@@ -15,11 +16,10 @@ void onConnection(const TcpConnectionPtr& conn) {
 }
 
 void onMessage(const TcpConnectionPtr& conn,
-               const char* data,
-               ssize_t len) 
+               muduo::Buffer* data,
+               muduo::Timestamp) 
 {
-    printf("received %zd bytes from connection [%s]\n",
-           len,
+    printf("from connection [%s]\n",
            conn->GetName().c_str());
 }
 

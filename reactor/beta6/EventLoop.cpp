@@ -59,18 +59,15 @@ void EventLoop::Loop() {
 
     while (!m_quit) {
         m_ActiveChannels.clear();
-        m_poller->Poll(kPollTimeMs, m_ActiveChannels);
-        // debug
-        if (m_ActiveChannels.empty()) {
-            LOG_DEBUG << "ActiveChannels Empty";
-        }
+        m_pollRetTime = m_poller->Poll(kPollTimeMs, m_ActiveChannels);
 
         for (auto& it : m_ActiveChannels) {
-            it->HandleEvent();
+            it->HandleEvent(m_pollRetTime);
         }
+
+        DoPendingFuncs();
     }
 
-    DoPendingFuncs();
 
     LOG_DEBUG << "EventLoop [" << this << "] stop looping.";
     m_looping = false;
