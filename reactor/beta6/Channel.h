@@ -3,7 +3,6 @@
 
 #include <functional>
 #include "netlib/base/noncopyable.h"
-#include "netlib/base/Timestamp.h"
 
 class EventLoop;
 
@@ -11,7 +10,6 @@ class Channel : noncopyable
 {
 public:
     using EventCallback = std::function<void()>;
-    using ReadEventCallback = std::function<void(Timestamp)>;
 public:
     Channel(EventLoop* loop, int fd);
     void HandleEvent();
