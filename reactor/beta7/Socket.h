@@ -18,6 +18,7 @@ public:
     void SetReuseAddr(bool on);
     int GetSockFd() const;
 
+    void ShutdownWrite();
 private:
     const int m_sockfd;
 };

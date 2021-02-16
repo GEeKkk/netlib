@@ -20,6 +20,8 @@ public:
     void SetCloseCallback(const EventCallback& cb);
 
     void EnableRead();
+    void EnableWrite();
+    void DisableWrite();
     void DisableAll();
 
     int GetFd() const;
@@ -27,6 +29,7 @@ public:
     void SetRevents(int revt);
 
     bool IsNoneEvent() const;
+    bool IsWriting() const;
 
     int GetIndex();
     void SetIndex(int idx);

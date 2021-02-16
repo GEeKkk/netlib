@@ -53,8 +53,22 @@ bool Channel::IsNoneEvent() const {
     return m_events == kNoneEvent;
 }
 
+bool Channel::IsWriting() const {
+    return m_events & kWriteEvent;
+}
+
 void Channel::EnableRead() {
     m_events |= kReadEvent;
+    Update();
+}
+
+void Channel::EnableWrite() {
+    m_events |= kWriteEvent;
+    Update();
+}
+
+void Channel::DisableWrite() {
+    m_events &= ~kWriteEvent;
     Update();
 }
 
@@ -78,7 +92,6 @@ void Channel::SetIndex(int idx) {
 EventLoop* Channel::OwnerLoop() {
     return m_Loop;
 }
-
 
 void Channel::HandleEvent(muduo::Timestamp recvTime) {
     m_eventHandling = true;

@@ -38,3 +38,7 @@ void Socket::SetReuseAddr(bool on) {
 int Socket::GetSockFd() const {
     return m_sockfd;
 }
+
+void Socket::ShutdownWrite() {
+    SocketUtil::shutdownWrite(m_sockfd);
+}

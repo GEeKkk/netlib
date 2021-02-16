@@ -75,7 +75,25 @@ void TcpConnection::HandleRead(muduo::Timestamp recvTime) {
 }
 
 void TcpConnection::HandleWrite() {
-    
+    m_loop->CheckInLoopThread();
+    if (m_pChan->IsWriting()) {
+        ssize_t n = ::write(m_pChan->GetFd(), m_ouputBuffer.peek(), m_ouputBuffer.readableBytes());
+        if (n > 0) {
+            m_ouputBuffer.retrieve(n);
+            if (m_ouputBuffer.readableBytes() == 0) {
+                m_pChan->DisableWrite();
+                if (m_state == kDisconnecting) {
+                    ShutdownInLoop();
+                }
+            } else {
+                LOG_DEBUG << "HandleWrite more data.";
+            }
+        } else {
+            LOG_ERROR << "TcpConnection::HandleWrite";
+        }
+    } else {
+        LOG_DEBUG << "Connection is down, no more writing";
+    }
 }
 
 void TcpConnection::HandleError() {
@@ -127,3 +145,52 @@ void TcpConnection::SetCloseHandler(const CloseHandler& hd) {
 void TcpConnection::SetTcpState(TcpState ts) {
     m_state = ts;
 } 
+
+void TcpConnection::Send(const std::string& message) {
+    if (m_state == kConnected) {
+        if (m_loop->IsInLoopThread()) {
+            SendInLoop(message);
+        } else {
+            m_loop->RunInLoop(std::bind(&TcpConnection::SendInLoop, this, message));
+        }
+    }
+}
+
+void TcpConnection::SendInLoop(const std::string& message) {
+    m_loop->CheckInLoopThread();
+    ssize_t nwrote = 0;
+    if (!m_pChan->IsWriting() && m_ouputBuffer.readableBytes() == 0) {
+        nwrote = ::write(m_pChan->GetFd(), message.data(), message.size());
+        if (nwrote > 0) {
+            if (implicit_cast<size_t>(nwrote) < message.size()) {
+                LOG_DEBUG << "nwrote < message.size()";
+            }
+        } else {
+            nwrote = 0;
+            if (errno != EWOULDBLOCK) {
+                LOG_SYSERR << "TcpConnection::SendInLoop";
+            }
+        }
+    }
+
+    if (implicit_cast<size_t>(nwrote) < message.size()) {
+        m_ouputBuffer.append(message.data() + nwrote, message.size() - nwrote);
+        if (!m_pChan->IsWriting()) {
+            m_pChan->EnableRead();
+        }
+    }
+}
+
+void TcpConnection::Shutdown() {
+    if (m_state == kConnected) {
+        SetTcpState(kDisconnecting);
+        m_loop->RunInLoop(std::bind(&TcpConnection::ShutdownInLoop, this));
+    }
+}
+
+void TcpConnection::ShutdownInLoop() {
+    m_loop->CheckInLoopThread();
+    if (!m_pChan->IsWriting()) {
+        m_pSocket->ShutdownWrite();
+    }
+}

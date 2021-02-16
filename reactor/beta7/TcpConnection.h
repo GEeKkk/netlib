@@ -31,6 +31,11 @@ public:
 
     bool IsConnected() const;
 
+    void Send(const std::string& message);
+    void SendInLoop(const std::string& message);
+    void Shutdown();
+    void ShutdownInLoop();
+
     void SetConnectionHandler(const ConnectionHandler& handler);
     void SetMessageHandler(const MessageHandler& handler);
 
@@ -44,6 +49,7 @@ private:
     enum TcpState {
         kConnecting,
         kConnected,
+        kDisconnecting,
         kDisconnected
     };
 private:
@@ -69,6 +75,7 @@ private:
     CloseHandler m_closeHandler;
 
     muduo::Buffer m_inputBuffer;
+    muduo::Buffer m_ouputBuffer;
 };
 
 #endif // TCPCONNECTION_H
