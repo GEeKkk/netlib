@@ -31,16 +31,16 @@ Timestamp Poller::Poll(int TimeoutMs, ChanVec& ActiveChannels) {
 }
 
 void Poller::AddToActiveChannels(int kEvents, ChanVec& ActiveChannels) const {
-    for (auto it = m_pollfds.cbegin(); 
-        it != m_pollfds.cend() && kEvents > 0; 
-        ++it)
-    {
-        if (it->revents > 0) {
+    for (const auto& it : m_pollfds) {
+        if (it.revents > 0) {
             --kEvents;
-            auto kv = std::as_const(m_chanmap).find(it->fd);
+            auto kv = std::as_const(m_chanMap).find(it.fd);
             Channel* chan = kv->second;
-            chan->SetRevents(it->revents);
+            chan->SetRevents(it.revents);
             ActiveChannels.emplace_back(chan);
+        }
+        if (kEvents <= 0) {
+            break;
         }
     }
 }
@@ -50,26 +50,24 @@ void Poller::CheckInLoopThread() {
     m_ownerloop->CheckInLoopThread();
 }
 
-void Poller::UpdateChannel(Channel* channel) {
+void Poller::UpdateChannel(Channel* chan) {
     CheckInLoopThread();
-    LOG_DEBUG << "fd = " << channel->GetFd() << " events = " << channel->GetEvents();
-
-    if (channel->GetIndex() < 0) {
+    LOG_DEBUG << "fd = " << chan->fd() << " events = " << chan->events();
+    if (chan->index() < 0) {
         struct pollfd pfd;
-        pfd.fd = channel->GetFd();
-        pfd.events = static_cast<short>(channel->GetEvents());
+        pfd.fd = chan->fd();
+        pfd.events = static_cast<short>(chan->events());
         pfd.revents = 0;
         m_pollfds.emplace_back(pfd);
-
         int idx = static_cast<int>(m_pollfds.size()) - 1;
-        channel->SetIndex(idx);
-        m_chanmap[pfd.fd] = channel;
+        chan->SetIndex(idx);
+        m_chanMap[pfd.fd] = chan;
     } else {
-        int idx = channel->GetIndex();
+        int idx = chan->index();
         struct pollfd& pfd = m_pollfds[idx];
-        pfd.events = static_cast<short>(channel->GetEvents());
+        pfd.events = static_cast<short>(chan->events());
         pfd.revents = 0;
-        if (channel->IsNoneEvent()) {
+        if (chan->IsNoneEvent()) {
             pfd.fd = -1;
         }
     }

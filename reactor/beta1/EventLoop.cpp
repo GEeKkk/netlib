@@ -41,12 +41,9 @@ void EventLoop::Loop() {
     while (!m_quit) {
         m_ActiveChannels.clear();
         m_poller->Poll(kPollTimeMs, m_ActiveChannels);
-        // debug
-        if (m_ActiveChannels.empty()) {
-            LOG_DEBUG << "ActiveChannels Empty";
-        }
 
         for (auto& it : m_ActiveChannels) {
+            LOG_DEBUG << "it->HandleEvent";
             it->HandleEvent();
         }
     }

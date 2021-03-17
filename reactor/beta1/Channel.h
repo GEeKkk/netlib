@@ -19,13 +19,13 @@ public:
 
     void EnableRead();
 
-    int GetFd() const;
-    int GetEvents() const;
+    int fd() const;
+    int events() const;
     void SetRevents(int revt);
 
     bool IsNoneEvent() const;
 
-    int GetIndex();
+    int index();
     void SetIndex(int idx);
     EventLoop* OwnerLoop();
 

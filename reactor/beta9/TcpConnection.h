@@ -32,12 +32,11 @@ public:
     bool IsConnected() const;
 
     void Send(const std::string& message);
-    void SendInLoop(const std::string& message);
     void Shutdown();
-    void ShutdownInLoop();
 
     void SetConnectionHandler(const ConnectionHandler& handler);
     void SetMessageHandler(const MessageHandler& handler);
+    void SetWriteDoneHandler(const WriteDoneHandler& handler);
 
     // internal use
     void SetCloseHandler(const CloseHandler& handler);
@@ -59,6 +58,9 @@ private:
     void HandleWrite();
     void HandleError();
     void HandleClose();
+
+    void SendInLoop(const std::string& message);
+    void ShutdownInLoop();
 private:
     EventLoop* m_loop;
 
@@ -73,6 +75,7 @@ private:
     ConnectionHandler m_connHandler;
     MessageHandler m_msgHandler;
     CloseHandler m_closeHandler;
+    WriteDoneHandler m_writeDoneHandler;
 
     muduo::Buffer m_inputBuffer;
     muduo::Buffer m_ouputBuffer;

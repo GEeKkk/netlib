@@ -37,7 +37,7 @@ void Poller::AddToActiveChannels(int kEvents, ChanVec& ActiveChannels) const {
     {
         if (it->revents > 0) {
             --kEvents;
-            auto kv = std::as_const(m_chanmap).find(it->fd);
+            auto kv = std::as_const(m_chanMap).find(it->fd);
             Channel* chan = kv->second;
             chan->SetRevents(it->revents);
             ActiveChannels.emplace_back(chan);
@@ -63,7 +63,7 @@ void Poller::UpdateChannel(Channel* channel) {
 
         int idx = static_cast<int>(m_pollfds.size()) - 1;
         channel->SetIndex(idx);
-        m_chanmap[pfd.fd] = channel;
+        m_chanMap[pfd.fd] = channel;
     } else {
         int idx = channel->GetIndex();
         struct pollfd& pfd = m_pollfds[idx];

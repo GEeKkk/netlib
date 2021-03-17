@@ -82,6 +82,9 @@ void TcpConnection::HandleWrite() {
             m_ouputBuffer.retrieve(n);
             if (m_ouputBuffer.readableBytes() == 0) {
                 m_pChan->DisableWrite();
+                if (m_writeDoneHandler) {
+                    m_loop->queueInLoop(std::bind(m_writeDoneHandler, shared_from_this()));
+                }
                 if (m_state == kDisconnecting) {
                     ShutdownInLoop();
                 }
@@ -142,6 +145,10 @@ void TcpConnection::SetCloseHandler(const CloseHandler& hd) {
     m_closeHandler = hd;
 }
 
+void TcpConnection::SetWriteDoneHandler(const WriteDoneHandler& hd) {
+    m_writeDoneHandler = hd;
+}
+
 void TcpConnection::SetTcpState(TcpState ts) {
     m_state = ts;
 } 
@@ -164,6 +171,8 @@ void TcpConnection::SendInLoop(const std::string& message) {
         if (nwrote > 0) {
             if (implicit_cast<size_t>(nwrote) < message.size()) {
                 LOG_DEBUG << "nwrote < message.size()";
+            } else if (m_writeDoneHandler) {
+                m_loop->queueInLoop(std::bind(m_writeDoneHandler, shared_from_this()));
             }
         } else {
             nwrote = 0;

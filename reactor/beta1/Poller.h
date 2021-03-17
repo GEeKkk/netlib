@@ -7,8 +7,6 @@
 #include "netlib/base/Timestamp.h"
 #include "EventLoop.h"
 
-// using namespace muduo;
-
 struct pollfd;
 class Channel;
 
@@ -28,14 +26,11 @@ public:
     
 private:
     void AddToActiveChannels(int kEvents, ChanVec& ActiveChannels) const; 
-private:
-    using PollFdVec = std::vector<struct pollfd>;
-    using FdChanMap = std::map<int, Channel*>;
 
 private:
     EventLoop* m_ownerloop;
-    PollFdVec m_pollfds;
-    FdChanMap m_chanmap;
+    std::vector<struct pollfd> m_pollfds;
+    std::map<int, Channel*> m_chanMap;
 };
 
 #endif // POLLER_H

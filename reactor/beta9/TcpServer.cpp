@@ -5,6 +5,8 @@
 #include "EventLoop.h"
 #include "SocketUtil.h"
 
+#include "EventLoopThreadPool.h"
+
 #include <functional>
 #include <stdio.h>
 
@@ -15,6 +17,7 @@ TcpServer::TcpServer(EventLoop* loop, const NetAddr& listenAddr)
     : m_loop(loop),
       m_name(listenAddr.ToHostPort()),
       m_Acceptor(std::make_unique<Acceptor>(loop, listenAddr)),
+      m_EventLoopThreadPool(std::make_unique<EventLoopThreadPool>(loop)),
       m_IsStarted(false),
       m_NextConnId(1)
 {
@@ -34,6 +37,10 @@ void TcpServer::Start() {
     if (!m_Acceptor->IsListening()) {
         m_loop->RunInLoop(std::bind(&Acceptor::Listen, m_Acceptor.get()));
     }
+}
+
+void TcpServer::SetThreadNum(int num) {
+    m_EventLoopThreadPool->SetThreadNum(num);
 }
 
 void TcpServer::SetConnHandler(const ConnectionHandler& hd) {
@@ -58,6 +65,8 @@ void TcpServer::NewConnection(int sockfd, const NetAddr& peerAddr) {
     
     NetAddr localAddr(SocketUtil::getLocalAddr(sockfd));
 
+    EventLoop* ioLoop = m_EventLoopThreadPool->GetNextLoop();
+
     TcpConnectionPtr connPtr(std::make_shared<TcpConnection>(m_loop, 
                                                              connName, 
                                                              sockfd, 
@@ -67,14 +76,21 @@ void TcpServer::NewConnection(int sockfd, const NetAddr& peerAddr) {
     connPtr->SetConnectionHandler(m_ConnHandler);
     connPtr->SetMessageHandler(m_MsgHandler);
     connPtr->SetCloseHandler(std::bind(&TcpServer::RemoveConnection, this, _1));
-    connPtr->ConnectEstablished();
+    ioLoop->RunInLoop(std::bind(&TcpConnection::ConnectEstablished, connPtr));
 }
 
 void TcpServer::RemoveConnection(const TcpConnectionPtr& connPtr) {
+    m_loop->RunInLoop(std::bind(&TcpServer::RemoveConnectionInLoop, this, connPtr));
+}
+
+
+void TcpServer::RemoveConnectionInLoop(const TcpConnectionPtr& connPtr) {
     m_loop->CheckInLoopThread();
     LOG_DEBUG << "TcpServer::RemoveConnection [" << m_name << "] - connection " << connPtr->GetName();
     
     m_ConnMap.erase(connPtr->GetName());
 
-    m_loop->queueInLoop(std::bind(&TcpConnection::ConnectDestroyed, connPtr));
+    EventLoop* ioLoop = connPtr->GetLoop();
+
+    ioLoop->queueInLoop(std::bind(&TcpConnection::ConnectDestroyed, connPtr));
 }

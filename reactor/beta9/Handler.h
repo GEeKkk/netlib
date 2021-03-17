@@ -15,5 +15,6 @@ using MessageHandler = std::function<void(const TcpConnectionPtr&,
                                           muduo::Buffer* buf,
                                           muduo::Timestamp)>;
 using CloseHandler = std::function<void(const TcpConnectionPtr&)>;
+using WriteDoneHandler = std::function<void(const TcpConnectionPtr&)>;
 
 #endif // HANDLER_H

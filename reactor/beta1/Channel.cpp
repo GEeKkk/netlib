@@ -32,11 +32,11 @@ void Channel::SetErrorCallback(const EventCallback& cb) {
     m_ErrorCallback = cb;
 }
 
-int Channel::GetFd() const {
+int Channel::fd() const {
     return m_fd;
 }
 
-int Channel::GetEvents() const {
+int Channel::events() const {
     return m_events;
 }
 
@@ -57,7 +57,7 @@ void Channel::Update() {
     m_Loop->UpdateChannel(this);
 }
 
-int Channel::GetIndex() {
+int Channel::index() {
     return m_index;
 }
 
@@ -73,6 +73,7 @@ EventLoop* Channel::OwnerLoop() {
 void Channel::HandleEvent() {
     if (m_revents & POLLNVAL) {
         LOG_WARN << "Channel::HandleEvent() POLLNVAL";
+        LOG_DEBUG << "Channel::HandleEvent() POLLNVAL";
     }
 
     if (m_revents & (POLLERR | POLLNVAL)) {
@@ -82,12 +83,14 @@ void Channel::HandleEvent() {
     }
 
     if (m_revents & (POLLIN | POLLPRI | POLLRDHUP)) {
+        LOG_DEBUG << "Channel::HandleEvent() POLLIN";
         if (m_ReadCallback) {
             m_ReadCallback();
         }
     }
 
     if (m_revents & POLLOUT) {
+        LOG_DEBUG << "Channel::HandleEvent POLLOUT";
         if (m_WriteCallback) {
             m_WriteCallback();
         }

@@ -35,7 +35,7 @@ private:
 private:
     EventLoop* m_ownerloop;
     PollFdVec m_pollfds;
-    FdChanMap m_chanmap;
+    FdChanMap m_chanMap;
 };
 
 #endif // POLLER_H

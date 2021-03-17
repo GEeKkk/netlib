@@ -39,22 +39,22 @@ int main(int argc, char const *argv[])
     durationA.it_interval.tv_sec = 5;
     ::timerfd_settime(timerfdA, 0, &durationA, NULL);
 
-    int timerfdB = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
-    g_fdB = timerfdB;
-    Channel chanB(&loop, timerfdB);
-    chanB.SetReadCallback(TestChanB);
-    chanB.EnableRead();
+    // int timerfdB = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+    // g_fdB = timerfdB;
+    // Channel chanB(&loop, timerfdB);
+    // chanB.SetReadCallback(TestChanB);
+    // chanB.EnableRead();
 
-    struct itimerspec durationB;
-    bzero(&durationB, sizeof(durationB));
-    durationB.it_value.tv_sec = 40;
-    durationB.it_interval.tv_sec = 6;
-    ::timerfd_settime(timerfdB, 0, &durationB, NULL);
+    // struct itimerspec durationB;
+    // bzero(&durationB, sizeof(durationB));
+    // durationB.it_value.tv_sec = 40;
+    // durationB.it_interval.tv_sec = 6;
+    // ::timerfd_settime(timerfdB, 0, &durationB, NULL);
 
 
     loop.Loop();
 
     ::close(timerfdA);
-    ::close(timerfdB);
+    // ::close(timerfdB);
     return 0;
 }
