@@ -6,7 +6,8 @@
 void threadFunc()
 {
     printf("threadFunc(): pid = %d, tid = %d\n",
-           getpid(), CurrentThread::tid());
+           getpid(), 
+           CurrentThread::tid());
 
     EventLoop loop;
     loop.Loop();
@@ -15,7 +16,8 @@ void threadFunc()
 int main()
 {
     printf("main(): pid = %d, tid = %d\n",
-           getpid(), CurrentThread::tid());
+           getpid(), 
+           CurrentThread::tid());
 
     EventLoop loop;
 
