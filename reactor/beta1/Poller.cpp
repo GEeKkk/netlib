@@ -14,7 +14,7 @@ Poller::Poller(EventLoop* loop)
 
 Poller::~Poller() { }
 
-Timestamp Poller::Poll(int TimeoutMs, ChanVec& ActiveChannels) {
+Timestamp Poller::Poll(int TimeoutMs, ChanArr& ActiveChannels) {
     int kEvents = ::poll(m_pollfds.data(), m_pollfds.size(), TimeoutMs);
     Timestamp now(Timestamp::now());
 
@@ -30,7 +30,7 @@ Timestamp Poller::Poll(int TimeoutMs, ChanVec& ActiveChannels) {
     return now;
 }
 
-void Poller::AddToActiveChannels(int kEvents, ChanVec& ActiveChannels) const {
+void Poller::AddToActiveChannels(int kEvents, ChanArr& ActiveChannels) const {
     for (const auto& it : m_pollfds) {
         if (it.revents > 0) {
             --kEvents;

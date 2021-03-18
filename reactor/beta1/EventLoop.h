@@ -25,17 +25,14 @@ public:
     void CheckInLoopThread();
 
     bool IsInLoopThread() const;
-
 private:
     void AbortNotInLoopThread();
-private:
-    using ChanVec = std::vector<Channel*>;
 private:
     bool m_looping;
     bool m_quit;
     const pid_t m_threadId; // 创建了EventLoop对象的线程是IO线程, 主要功能是运行Loop()
     std::unique_ptr<Poller> m_poller;
-    ChanVec m_ActiveChannels;
+    std::vector<Channel*> m_ActiveChannels;
 };
 
 #endif // EVENTLOOP_H
