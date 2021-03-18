@@ -1,4 +1,6 @@
 #include "EventLoop.h"
+#include "Poller.h"
+#include "Channel.h"
 
 #include "netlib/base/CurrentThread.h"
 #include "netlib/base/Logging.h"
@@ -7,11 +9,14 @@
 
 using namespace muduo;
 
+const int kPollTimeout = 10000;
 __thread EventLoop* t_loopInCurrentThread = nullptr;
 
 EventLoop::EventLoop()
         : m_looping(false),
-          m_threadId(CurrentThread::tid())
+          m_threadId(CurrentThread::tid()),
+          m_quit(false),
+          m_poller(std::make_unique<Poller>(this))
 {
     LOG_DEBUG << "Created loop [" << this << "] in thread " << m_threadId;
     /// 每个线程只能有一个eventloop, 
@@ -32,16 +37,33 @@ void EventLoop::Loop() {
     // 事件循环必须在IO线程中执行，pre-condition
     CheckInLoopThread();
     m_looping = true;
-    ::poll(NULL, 0, 5 * 1000);
-
+    m_quit = false;
+    while (!m_quit) {
+        m_activeChans.clear();
+        m_poller->Poll(kPollTimeout, m_activeChans);
+        for (auto& it : m_activeChans) {
+            it->HandleEvent();
+        }
+    }
     LOG_DEBUG << "[" << this << "] STOP!";
     m_looping = false;
 }
+
+void EventLoop::Quit() {
+    m_quit = true;
+}
+
+void EventLoop::UpdateChannel(Channel* chan) {
+    CheckInLoopThread();
+    m_poller->UpdateChannel(chan);
+}
+
 void EventLoop::CheckInLoopThread() {
      if (!IsInLoopThread()) {
         AbortNotInLoopThread();
      }
 }
+
 bool EventLoop::IsInLoopThread() const {
     return m_threadId == CurrentThread::tid();
 }
