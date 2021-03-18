@@ -13,7 +13,7 @@ EventLoop::EventLoop()
         : m_looping(false),
           m_threadId(CurrentThread::tid())
 {
-    LOG_DEBUG << "EventLoop created [" << this << "] in thread (" << m_threadId << ")";
+    LOG_DEBUG << "Created loop [" << this << "] in thread " << m_threadId;
     /// 每个线程只能有一个eventloop, 
     /// 创建之前需要检查是否已经创建了其他loop对象
     if (t_loopInCurrentThread) {
@@ -34,12 +34,12 @@ void EventLoop::Loop() {
     m_looping = true;
     ::poll(NULL, 0, 5 * 1000);
 
-    LOG_DEBUG << "EventLoop [" << this << "] stop looping.";
+    LOG_DEBUG << "[" << this << "] STOP!";
     m_looping = false;
 }
 void EventLoop::CheckInLoopThread() {
      if (!IsInLoopThread()) {
-         AbortNotInLoopThread();
+        AbortNotInLoopThread();
      }
 }
 bool EventLoop::IsInLoopThread() const {
@@ -47,6 +47,9 @@ bool EventLoop::IsInLoopThread() const {
 }
 
 void EventLoop::AbortNotInLoopThread() {
-    LOG_FATAL << "EventLoop Abort. Created in thread(" << m_threadId 
-              << "), but current thread is (" << CurrentThread::tid() << ")";
+    LOG_FATAL << "EventLoop Abort. Created in thread(" 
+              << m_threadId 
+              << "), but current thread is (" 
+              << CurrentThread::tid() 
+              << ")";
 }

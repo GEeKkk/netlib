@@ -5,7 +5,7 @@
 
 void threadFunc()
 {
-    printf("threadFunc(): pid = %d, tid = %d\n",
+    printf("[branch thread] pid = %d tid = %d\n",
            getpid(), 
            CurrentThread::tid());
 
@@ -15,7 +15,7 @@ void threadFunc()
 
 int main()
 {
-    printf("main(): pid = %d, tid = %d\n",
+    printf("[main thread] pid = %d tid = %d\n",
            getpid(), 
            CurrentThread::tid());
 
