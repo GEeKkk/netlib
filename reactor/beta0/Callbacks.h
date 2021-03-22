@@ -1,7 +1,7 @@
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
 
-#include "netlib/base/Timestamp.h"
+#include <memory>
 #include <functional>
 
 using TimerCallback = std::function<void()>;

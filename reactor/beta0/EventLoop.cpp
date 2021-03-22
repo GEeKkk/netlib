@@ -1,6 +1,7 @@
 #include "EventLoop.h"
 #include "Poller.h"
 #include "Channel.h"
+#include "TimerManager.h"
 
 #include "netlib/base/CurrentThread.h"
 #include "netlib/base/Logging.h"
@@ -16,7 +17,8 @@ EventLoop::EventLoop()
         : m_looping(false),
           m_threadId(CurrentThread::tid()),
           m_quit(false),
-          m_poller(std::make_unique<Poller>(this))
+          m_poller(std::make_unique<Poller>(this)),
+          m_timerManger(std::make_unique<TimerManager>(this))
 {
     LOG_DEBUG << "Created loop [" << this << "] in thread " << m_threadId;
     /// 每个线程只能有一个eventloop, 
@@ -74,4 +76,18 @@ void EventLoop::AbortNotInLoopThread() {
               << "), but current thread is (" 
               << CurrentThread::tid() 
               << ")";
+}
+
+void EventLoop::RunAt(const Timestamp& time, const TimerCallback& cb) {
+    m_timerManger->AddTimer(cb, time, 0.0);
+}
+
+void EventLoop::RunAfter(double delay, const TimerCallback& cb) {
+    Timestamp time(addTime(Timestamp::now(), delay));
+    RunAt(time, cb);
+}
+
+void EventLoop::RunEvery(double interval, const TimerCallback& cb) {
+    Timestamp time(addTime(Timestamp::now(), interval));
+    m_timerManger->AddTimer(cb, time, interval);
 }
