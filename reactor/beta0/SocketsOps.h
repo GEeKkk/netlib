@@ -1,10 +1,22 @@
-#ifndef SOCKETUTIL_H
-#define SOCKETUTIL_H
+// Copyright 2010, Shuo Chen.  All rights reserved.
+// http://code.google.com/p/muduo/
+//
+// Use of this source code is governed by a BSD-style license
+// that can be found in the License file.
+
+// Author: Shuo Chen (chenshuo at chenshuo dot com)
+//
+// This is an internal header file, you should not include this.
+
+#ifndef MUDUO_NET_SOCKETSOPS_H
+#define MUDUO_NET_SOCKETSOPS_H
 
 #include <arpa/inet.h>
 #include <endian.h>
 
-namespace SocketUtil
+namespace muduo
+{
+namespace sockets
 {
 
 inline uint64_t hostToNetwork64(uint64_t host64)
@@ -52,6 +64,6 @@ void toHostPort(char* buf, size_t size,
 void fromHostPort(const char* ip, uint16_t port,
                   struct sockaddr_in* addr);
 }
+}
 
-
-#endif // SOCKETUTIL_H
+#endif  // MUDUO_NET_SOCKETSOPS_H

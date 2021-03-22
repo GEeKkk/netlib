@@ -1,5 +1,12 @@
-#include "SocketUtil.h"
+// Copyright 2010, Shuo Chen.  All rights reserved.
+// http://code.google.com/p/muduo/
+//
+// Use of this source code is governed by a BSD-style license
+// that can be found in the License file.
 
+// Author: Shuo Chen (chenshuo at chenshuo dot com)
+
+#include "SocketsOps.h"
 #include "netlib/base/Logging.h"
 
 #include <errno.h>
@@ -43,14 +50,14 @@ void setNonBlockAndCloseOnExec(int sockfd)
 
 }
 
-int SocketUtil::createNonblockingOrDie()
+int sockets::createNonblockingOrDie()
 {
   // socket
 #if VALGRIND
   int sockfd = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sockfd < 0)
   {
-    LOG_SYSFATAL << "SocketUtil::createNonblockingOrDie";
+    LOG_SYSFATAL << "sockets::createNonblockingOrDie";
   }
 
   setNonBlockAndCloseOnExec(sockfd);
@@ -60,31 +67,31 @@ int SocketUtil::createNonblockingOrDie()
                         IPPROTO_TCP);
   if (sockfd < 0)
   {
-    LOG_SYSFATAL << "SocketUtil::createNonblockingOrDie";
+    LOG_SYSFATAL << "sockets::createNonblockingOrDie";
   }
 #endif
   return sockfd;
 }
 
-void SocketUtil::bindOrDie(int sockfd, const struct sockaddr_in& addr)
+void sockets::bindOrDie(int sockfd, const struct sockaddr_in& addr)
 {
   int ret = ::bind(sockfd, sockaddr_cast(&addr), sizeof addr);
   if (ret < 0)
   {
-    LOG_SYSFATAL << "SocketUtil::bindOrDie";
+    LOG_SYSFATAL << "sockets::bindOrDie";
   }
 }
 
-void SocketUtil::listenOrDie(int sockfd)
+void sockets::listenOrDie(int sockfd)
 {
   int ret = ::listen(sockfd, SOMAXCONN);
   if (ret < 0)
   {
-    LOG_SYSFATAL << "SocketUtil::listenOrDie";
+    LOG_SYSFATAL << "sockets::listenOrDie";
   }
 }
 
-int SocketUtil::accept(int sockfd, struct sockaddr_in* addr)
+int sockets::accept(int sockfd, struct sockaddr_in* addr)
 {
   socklen_t addrlen = sizeof *addr;
 #if VALGRIND
@@ -128,30 +135,31 @@ int SocketUtil::accept(int sockfd, struct sockaddr_in* addr)
   return connfd;
 }
 
-void SocketUtil::close(int sockfd)
+void sockets::close(int sockfd)
 {
   if (::close(sockfd) < 0)
   {
-    LOG_SYSERR << "SocketUtil::close";
+    LOG_SYSERR << "sockets::close";
   }
 }
 
-void SocketUtil::toHostPort(char* buf, size_t size,
+void sockets::toHostPort(char* buf, size_t size,
                          const struct sockaddr_in& addr)
 {
   char host[INET_ADDRSTRLEN] = "INVALID";
   ::inet_ntop(AF_INET, &addr.sin_addr, host, sizeof host);
-  uint16_t port = SocketUtil::networkToHost16(addr.sin_port);
+  uint16_t port = sockets::networkToHost16(addr.sin_port);
   snprintf(buf, size, "%s:%u", host, port);
 }
 
-void SocketUtil::fromHostPort(const char* ip, uint16_t port,
+void sockets::fromHostPort(const char* ip, uint16_t port,
                            struct sockaddr_in* addr)
 {
   addr->sin_family = AF_INET;
   addr->sin_port = hostToNetwork16(port);
   if (::inet_pton(AF_INET, ip, &addr->sin_addr) <= 0)
   {
-    LOG_SYSERR << "SocketUtil::fromHostPort";
+    LOG_SYSERR << "sockets::fromHostPort";
   }
 }
+
