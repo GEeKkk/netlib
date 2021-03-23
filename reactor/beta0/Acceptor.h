@@ -13,15 +13,17 @@ class EventLoop;
 class Acceptor : noncopyable
 {
 public:
-    using ConnectionHandler = std::function<void(muduo::Socket&& socket,
-                                                const muduo::InetAddress& addr)>;
+    using ConnHandler = std::function<void(int sockfd,
+                                           const muduo::InetAddress& addr)>;
 
 public:
     Acceptor(EventLoop* loop, const muduo::InetAddress& listenAddr);
     ~Acceptor() {}
 
-    void SetConnectionHandler(const ConnectionHandler& hd);
+    void SetConnHandler(const ConnHandler& hd);
     void Listen();
+
+    bool IsListenning() const;
 
 private:
     void HandleRead();
@@ -29,7 +31,8 @@ private:
     EventLoop* m_loop;
     muduo::Socket m_AcceptSocket;
     Channel m_AcceptChannel;
-    ConnectionHandler m_ConnHandler;
+    ConnHandler m_ConnHandler;
+    bool m_listenning;
 };
 
 #endif // ACCEPTOR_H

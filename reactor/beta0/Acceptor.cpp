@@ -8,7 +8,8 @@ using namespace muduo;
 Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
     : m_loop(loop),
       m_AcceptSocket(sockets::createNonblockingOrDie()),
-      m_AcceptChannel(loop, m_AcceptSocket.fd())
+      m_AcceptChannel(loop, m_AcceptSocket.fd()),
+      m_listenning(false)
 {
     m_AcceptSocket.setReuseAddr(true);
     m_AcceptSocket.bindAddress(addr);
@@ -17,11 +18,16 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
 
 void Acceptor::Listen() {
     m_loop->CheckInLoopThread();
+    m_listenning = true;
     m_AcceptSocket.listen();
     m_AcceptChannel.EnableRead();
 }
 
-void Acceptor::SetConnectionHandler(const ConnectionHandler& hd) {
+bool Acceptor::IsListenning() const {
+    return m_listenning;
+}
+
+void Acceptor::SetConnHandler(const ConnHandler& hd) {
     m_ConnHandler = hd;
 }
 
@@ -31,8 +37,7 @@ void Acceptor::HandleRead() {
     int connfd = m_AcceptSocket.accept(&peerAddr);
     if (connfd >= 0) {
         if (m_ConnHandler) {
-            Socket connSocket(connfd);
-            m_ConnHandler(std::move(connSocket), peerAddr);
+            m_ConnHandler(connfd, peerAddr);
         } else {
             printf("No ConnHnadler, close\n");
             close(connfd);

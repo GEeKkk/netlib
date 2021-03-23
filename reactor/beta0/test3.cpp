@@ -1,41 +1,48 @@
 #include "EventLoop.h"
-#include "netlib/base/Timestamp.h"
 #include "netlib/base/CurrentThread.h"
 #include <stdio.h>
-using namespace muduo;
-int cnt = 0;
-EventLoop *g_loop = nullptr;
 
-void printTid()
+using namespace std;
+using namespace muduo;
+
+EventLoop *g_loop;
+int g_flag = 0;
+
+void run4()
 {
-    printf("pid = %d, tid = %d\n", getpid(), CurrentThread::tid());
-    printf("now %s\n", Timestamp::now().toString().c_str());
+    printf("run4(): pid = %d, tid = %d, flag = %d\n", getpid(), CurrentThread::tid(), g_flag);
+    g_loop->Quit();
 }
 
-void print(const char *msg)
+void run3()
 {
-    printf("msg %s %s\n", Timestamp::now().toString().c_str(), msg);
-    if (++cnt == 20)
-    {
-        g_loop->Quit();
-    }
+    printf("run3(): pid = %d, tid = %d, flag = %d\n", getpid(), CurrentThread::tid(), g_flag);
+    g_loop->RunAfter(3, run4);
+    g_flag = 3;
+}
+
+void run2()
+{
+    printf("run2(): pid = %d, tid = %d, flag = %d\n", getpid(), CurrentThread::tid(), g_flag);
+    g_loop->Stored(run3);
+}
+
+void run1()
+{
+    g_flag = 1;
+    printf("run1(): pid = %d, tid = %d, flag = %d\n", getpid(), CurrentThread::tid(), g_flag);
+    g_loop->RunInLoop(run2);
+    g_flag = 2;
 }
 
 int main()
 {
-    printTid();
+    printf("main(): pid = %d, flag = %d\n", getpid(), g_flag);
+
     EventLoop loop;
     g_loop = &loop;
 
-    print("main");
-    // loop.RunAfter(1, std::bind(print, "once1"));
-    // loop.RunAfter(1.5, std::bind(print, "once1.5"));
-    // loop.RunAfter(2.5, std::bind(print, "once2.5"));
-    // loop.RunAfter(3.5, std::bind(print, "once3.5"));
-    // loop.RunEvery(2, std::bind(print, "every2"));
-    loop.RunEvery(3, std::bind(print, "every3"));
-
+    loop.RunAfter(2, run1);
     loop.Loop();
-    print("main loop exits");
-    sleep(1);
+    printf("main(): pid = %d, flag = %d\n", getpid(), g_flag);
 }

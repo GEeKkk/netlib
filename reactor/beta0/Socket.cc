@@ -19,6 +19,7 @@ using namespace muduo;
 
 Socket::~Socket()
 {
+  printf("~Socket fd = %d\n", sockfd_);
   sockets::close(sockfd_);
 }
 

@@ -67,7 +67,7 @@ void Channel::set_index(int idx) {
 
 void Channel::HandleEvent() {
     if (m_revents & POLLNVAL) {
-        LOG_WARN << "POLLNVAL";
+        // LOG_WARN << "POLLNVAL";
     }
     if (m_revents & (POLLIN | POLLPRI | POLLRDHUP)) {
         if (m_ReadCallback) {

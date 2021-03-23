@@ -50,7 +50,7 @@ void Poller::FillActiveChannels(int num, std::vector<Channel*>& activeChans) {
 void Poller::Poll(int timeoutMs, std::vector<Channel*>& activeChans) {
     int num = poll(m_pollfds.data(), m_pollfds.size(), timeoutMs);
     if (num > 0) {
-        LOG_DEBUG << num << " event happended";
+        // LOG_DEBUG << num << " event happended";
         FillActiveChannels(num, activeChans);
     } else if (num == 0) {
         LOG_DEBUG << "Nothing happended";

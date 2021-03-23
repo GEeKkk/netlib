@@ -22,11 +22,11 @@ void Response(Socket&& sock, const InetAddress& peerAddr) {
     write(sock.fd(), "pong!\n", 6);
 }
 
-void ListenAndLoop(uint16_t port, const Acceptor::ConnectionHandler& hd) {
+void ListenAndLoop(uint16_t port, const Acceptor::ConnHandler& hd) {
     InetAddress listenAddr(port);
     EventLoop loop;
     Acceptor acceptor(&loop, listenAddr);
-    acceptor.SetConnectionHandler(hd);
+    acceptor.SetConnHandler(hd);
     acceptor.Listen();
     loop.Loop();
 }
