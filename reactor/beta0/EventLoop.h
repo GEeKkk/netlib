@@ -23,6 +23,7 @@ public:
     void Quit();
 
     void UpdateChannel(Channel* chan);
+    void RemoveChannel(Channel* chan);
 
     void CheckInLoopThread();
     bool IsInLoopThread() const;
@@ -34,7 +35,6 @@ public:
     void RunAt(const muduo::Timestamp& time, const TimerCallback& cb);
     void RunAfter(double delay, const TimerCallback& cb);
     void RunEvery(double interval, const TimerCallback& cb);
-
 private:
     void AbortNotInLoopThread();
     void HandleRead();

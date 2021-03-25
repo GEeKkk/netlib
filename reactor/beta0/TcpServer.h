@@ -21,6 +21,7 @@ public:
     void SetMsgCallback(const TcpMsgCallback& cb);
 
     void HandleOneConn(int sockfd, const muduo::InetAddress& peerAddr);
+    void RemoveOneConn(const TcpConnPtr& conn);
 private:
     using ConnMap = std::unordered_map<std::string, TcpConnPtr>;
 private:

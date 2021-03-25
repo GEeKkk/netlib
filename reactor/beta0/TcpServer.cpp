@@ -41,10 +41,21 @@ void TcpServer::HandleOneConn(int sockfd, const InetAddress& peerAddr) {
     InetAddress localAddr(sockets::getLocalAddr(sockfd));
     TcpConnPtr conn(make_shared<TcpConn>(m_loop, connName, sockfd, localAddr, peerAddr));
     m_connMap[connName] = conn;
+    // 用户读写事件回调
     conn->SetConnCallback(m_connCallback);
     conn->SetMsgCallback(m_msgCallback);
+    // 库内关闭事件回调
+    conn->SetCloseCallback(bind(&TcpServer::RemoveOneConn, this, placeholders::_1));
     conn->ConnEstablished();
 }
+
+void TcpServer::RemoveOneConn(const TcpConnPtr& conn) {
+    m_loop->CheckInLoopThread();
+    m_connMap.erase(conn->name());
+    m_loop->Stored(bind(&TcpConn::ConnDestroyed, conn));
+}
+
+
 void TcpServer::SetConnCallback(const TcpConnCallback& cb) {
     m_connCallback = cb;
 }

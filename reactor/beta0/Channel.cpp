@@ -13,7 +13,8 @@ Channel::Channel(EventLoop* loop, int fd)
       m_fd(fd),
       m_events(0),
       m_revents(0),
-      m_index(-1)
+      m_index(-1),
+      m_eventHandling(false)
     {
     }
 
@@ -31,6 +32,14 @@ void Channel::SetError(const EventCallback& cb) {
     m_ErrorCallback = cb;
 }
 
+void Channel::SetClose(const EventCallback& cb) {
+    m_CloseCallback = cb;
+}
+
+void Channel::DisableAll() {
+    m_events = kNone;
+    Register();
+}
 
 void Channel::EnableRead() {
     m_events |= kRead;
@@ -66,8 +75,9 @@ void Channel::set_index(int idx) {
 }
 
 void Channel::HandleEvent() {
+    m_eventHandling = true;
     if (m_revents & POLLNVAL) {
-        // LOG_WARN << "POLLNVAL";
+        LOG_WARN << "POLLNVAL";
     }
     if (m_revents & (POLLIN | POLLPRI | POLLRDHUP)) {
         if (m_ReadCallback) {
@@ -84,4 +94,10 @@ void Channel::HandleEvent() {
             m_ErrorCallback();
         }
     }
+    if ((m_revents & POLLHUP) && !(m_revents & POLLIN)) {
+        if (m_CloseCallback) {
+            m_CloseCallback();
+        }
+    }
+    m_eventHandling = false;
 }

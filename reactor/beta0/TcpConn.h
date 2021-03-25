@@ -25,8 +25,10 @@ public:
     bool Connected() const;
     void SetConnCallback(const TcpConnCallback& cb);
     void SetMsgCallback(const TcpMsgCallback& cb);
+    void SetCloseCallback(const TcpCloseCallback& cb);
 
     void ConnEstablished();
+    void ConnDestroyed();
     std::string name() const {
         return m_name;
     }
@@ -38,10 +40,14 @@ private:
     enum ConnState {
         kConnecting,
         kConnected,
+        kDisconnected,
     };
 private:
     void SetState(ConnState st);
     void HandleRead();
+    void HandleWrite();
+    void HandleClose();
+    void HandleError();
 private:
     EventLoop* m_loop;
     std::string m_name;
@@ -52,6 +58,7 @@ private:
     muduo::InetAddress m_peerAddr;
     TcpConnCallback m_connCallback;
     TcpMsgCallback m_msgCallback;
+    TcpCloseCallback m_closeCallback;
 };
 
 // using TcpConnPtr = std::shared_ptr<TcpConn>;

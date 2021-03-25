@@ -18,6 +18,7 @@ public:
     void Poll(int timeoutMs, std::vector<Channel*>& activeChans);
     void FillActiveChannels(int numEvents, std::vector<Channel*>& activeChans);
     void UpdateChannel(Channel* channel);
+    void RemoveChannel(Channel* channel);
 private:
     EventLoop* m_eloop;
     std::vector<struct pollfd> m_pollfds;

@@ -1,5 +1,5 @@
 LIB_SRC = EventLoop.cpp Channel.cpp Poller.cpp Acceptor.cpp Timer.cpp TimerManager.cpp Socket.cc SocketsOps.cc InetAddress.cc TcpServer.cpp TcpConn.cpp
-BINARIES = test5
+BINARIES = test6
 
 all: $(BINARIES)
 
@@ -11,3 +11,4 @@ test2: test2.cpp
 test3: test3.cpp
 test4: test4.cpp
 test5: test5.cpp
+test6: test6.cpp

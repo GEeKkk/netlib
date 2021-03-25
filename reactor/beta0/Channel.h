@@ -18,6 +18,7 @@ public:
     void SetRead(const EventCallback& cb);
     void SetWrite(const EventCallback& cb);
     void SetError(const EventCallback& cb);
+    void SetClose(const EventCallback& cb);
 
     void EnableRead();
 
@@ -30,12 +31,15 @@ public:
 
     bool IsNone() const;
 
+    void DisableAll();
+
 private:
     void Register();
 private:
     EventCallback m_ReadCallback;
     EventCallback m_WriteCallback;
     EventCallback m_ErrorCallback;
+    EventCallback m_CloseCallback;
 
     static const int kNone;
     static const int kRead;
@@ -46,6 +50,7 @@ private:
     int m_events;
     int m_revents;
     int m_index;
+    bool m_eventHandling;
 };
 
 #endif // CHANNEL_H
