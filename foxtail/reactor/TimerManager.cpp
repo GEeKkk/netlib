@@ -17,7 +17,8 @@ int CreateTimerfd() {
 
 void ReadTimerfd(int fd) {
     uint64_t buf;
-    read(fd, &buf, sizeof(buf));
+    ssize_t n = read(fd, &buf, sizeof(buf));
+    (void)n;
 }
 
 struct timespec DurationFromNow(Timestamp finishTime) {

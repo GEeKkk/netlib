@@ -53,3 +53,4 @@ message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_T
 
 add_subdirectory(foxtail/base)
 add_subdirectory(foxtail/reactor)
+add_subdirectory(demo)

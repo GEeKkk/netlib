@@ -14,4 +14,4 @@ install(TARGETS base DESTINATION lib)
 
 file(GLOB HEADERS "*.h")
 # 安装头文件
-install(FILES ${HEADERS} DESTINATION include/base)
+install(FILES ${HEADERS} DESTINATION include/foxtail/base)

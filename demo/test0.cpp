@@ -1,28 +1,24 @@
-#include "netlib/reactor/EventLoop.h"
-#include "netlib/base/CurrentThread.h"
+#include <foxtail/reactor/EventLoop.h>
+#include <foxtail/base/CurrentThread.h>
+
 #include <stdio.h>
 #include <thread>
 
-void threadFunc()
-{
-    printf("[branch thread] pid = %d tid = %d\n",
-           getpid(), 
-           CurrentThread::tid());
+using namespace std;
 
+void Tester()
+{
+    printf("[sub] pid = %d, tid = %d\n", getpid(), CurrentThread::tid());
     EventLoop loop;
     loop.Loop();
 }
 
 int main()
 {
-    printf("[main thread] pid = %d tid = %d\n",
-           getpid(), 
-           CurrentThread::tid());
+    printf("[main] pid = %d,tid = %d\n", getpid(), CurrentThread::tid());
 
     EventLoop loop;
-
-    std::thread th(threadFunc);
+    thread th(Tester);
     loop.Loop();
     th.join();
-    pthread_exit(NULL);
 }

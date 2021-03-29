@@ -130,12 +130,14 @@ void EventLoop::RunEvery(double interval, const TimerCallback& cb) {
 
 void EventLoop::WakeUp() {
     uint64_t one = 1;
-    write(m_wakeupFd, &one, sizeof(one));
+    ssize_t n = write(m_wakeupFd, &one, sizeof(one));
+    (void)n;
 }
 
 void EventLoop::HandleRead() {
     uint64_t one = 1;
-    read(m_wakeupFd, &one, sizeof(one));
+    ssize_t n = read(m_wakeupFd, &one, sizeof(one));
+    (void)n;
 }
 
 void EventLoop::RunInLoop(const Functor& cb) {

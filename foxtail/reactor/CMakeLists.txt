@@ -15,10 +15,21 @@ set(reactor_src
   TimerManager.cpp
   )
 
+set(HEADERS
+  Buffer.h
+  Callbacks.h
+  Channel.h
+  EventLoop.h
+  IOThread.h
+  IOThreadPool.h
+  InetAddress.h
+  TcpConn.h
+  TcpServer.h
+  )
+
+
 add_library(reactor ${reactor_src})
 target_link_libraries(reactor base pthread)
 
 install(TARGETS reactor DESTINATION lib)
-
-file(GLOB HEADERS "*.h")
-install(FILES ${HEADERS} DESTINATION include/reactor)
+install(FILES ${HEADERS} DESTINATION include/foxtail/reactor)
