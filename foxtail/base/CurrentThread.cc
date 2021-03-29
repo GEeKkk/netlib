@@ -1,4 +1,4 @@
-#include <netlib/base/CurrentThread.h>
+#include "CurrentThread.h"
 
 #include <type_traits>
 #include <sys/syscall.h>

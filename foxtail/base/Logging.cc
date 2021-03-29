@@ -1,7 +1,7 @@
 #include "Logging.h"
 
-#include "netlib/base/Timestamp.h"
-#include "netlib/base/CurrentThread.h"
+#include "Timestamp.h"
+#include "CurrentThread.h"
 
 #include <errno.h>
 #include <stdio.h>

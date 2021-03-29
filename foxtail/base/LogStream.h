@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <string.h>
 #include <string>
-#include "netlib/base/noncopyable.h"
+#include "noncopyable.h"
 
 namespace muduo
 {
