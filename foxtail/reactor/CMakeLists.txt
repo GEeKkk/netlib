@@ -22,5 +22,3 @@ install(TARGETS reactor DESTINATION lib)
 
 file(GLOB HEADERS "*.h")
 install(FILES ${HEADERS} DESTINATION include/reactor)
-
-add_subdirectory(tests)
