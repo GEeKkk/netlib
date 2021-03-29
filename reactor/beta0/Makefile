@@ -1,4 +1,4 @@
-LIB_SRC = EventLoop.cpp Channel.cpp Poller.cpp Acceptor.cpp IOThread.cpp\
+LIB_SRC = EventLoop.cpp Channel.cpp Poller.cpp Acceptor.cpp IOThread.cpp IOThreadPool.cpp\
 		Timer.cpp TimerManager.cpp Buffer.cpp Socket.cc SocketsOps.cc InetAddress.cc TcpServer.cpp TcpConn.cpp \
 
 BINARIES = test8

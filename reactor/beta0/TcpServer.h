@@ -29,13 +29,15 @@ public:
         m_writeCompleteCallback = cb;
     }
 
-    void SetThreadNum(int num) {
-        m_IoThreadPool->SetThreadNum(num);
-    }
+    void SetThreadNum(int num);
 
-    void HandleOneConn(int sockfd, const muduo::InetAddress& peerAddr);
-    void RemoveOneConn(const TcpConnPtr& conn);
-    void RemoveOneConnInLoop(const TcpConnPtr& conn);
+    // void SetThreadNum(int num) {
+    //     m_IoThreadPool->SetThreadNum(num);
+    // }
+
+    void HandleNewConn(int sockfd, const muduo::InetAddress& peerAddr);
+    void RemoveConn(const TcpConnPtr& conn);
+    void RemoveConnInLoop(const TcpConnPtr& conn);
 private:
     using ConnMap = std::unordered_map<std::string, TcpConnPtr>;
 private:

@@ -25,7 +25,6 @@ public:
     void SetConnCallback(const ConnCallback& cb) {
         m_ConnCallback = cb;
     }
-
     bool IsListenning() const {
         return m_listenning;
     }

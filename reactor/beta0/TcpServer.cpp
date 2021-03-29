@@ -17,7 +17,7 @@ TcpServer::TcpServer(EventLoop* loop, const InetAddress& listenAddr)
       m_nextConnId(1),
       m_name(listenAddr.toHostPort())
 {
-    m_acceptor->SetConnHandler(std::bind(&TcpServer::HandleOneConn, this, placeholders::_1, placeholders::_2));
+    m_acceptor->SetConnCallback(bind(&TcpServer::HandleNewConn, this, placeholders::_1, placeholders::_2));
 }
 
 TcpServer::~TcpServer() {
@@ -34,8 +34,12 @@ void TcpServer::Start() {
     }
 }
 
+void TcpServer::SetThreadNum(int num) {
+    m_IoThreadPool->SetThreadNum(num);
+}
+
 // 非线程安全函数，需要保证在IO线程操作
-void TcpServer::HandleOneConn(int connfd, const InetAddress& peerAddr) {
+void TcpServer::HandleNewConn(int connfd, const InetAddress& peerAddr) {
     m_AcceptorLoop->CheckInLoopThread();
     // 设置Tcp连接名称
     string tmpName("#");
@@ -46,26 +50,28 @@ void TcpServer::HandleOneConn(int connfd, const InetAddress& peerAddr) {
     // 从线程池中拿出一个IO线程处理连接
     EventLoop* ioLoop = m_IoThreadPool->GetNextLoop();
     // 创建Tcp连接对象
-    TcpConnPtr conn(make_shared<TcpConn>(ioLoop, connName, connfd, localAddr, peerAddr));
+    TcpConnPtr conn = make_shared<TcpConn>(ioLoop, connName, connfd, localAddr, peerAddr);
+    // 连接集合
     m_connMap[connName] = conn;
-    // 用户读写事件回调
+    // 连接建立
     conn->SetConnCallback(m_connCallback);
+    // 消息到来
     conn->SetMsgCallback(m_msgCallback);
-    // 库内关闭事件回调
-    conn->SetCloseCallback(bind(&TcpServer::RemoveOneConn, this, placeholders::_1));
+    // 关闭事件
+    conn->SetCloseCallback(bind(&TcpServer::RemoveConn, this, placeholders::_1));
     // 发送缓冲区为空，继续发送事件
     conn->SetWriteCompleteCallback(m_writeCompleteCallback);
+
     ioLoop->RunInLoop(bind(&TcpConn::ConnEstablished, conn));
 }
 
-
-void TcpServer::RemoveOneConnInLoop(const TcpConnPtr& conn) {
+void TcpServer::RemoveConnInLoop(const TcpConnPtr& conn) {
     m_AcceptorLoop->CheckInLoopThread();
     m_connMap.erase(conn->name());
     EventLoop* ioLoop = conn->GetLoop();
     ioLoop->Stored(bind(&TcpConn::ConnDestroyed, conn));
 }
 
-void TcpServer::RemoveOneConn(const TcpConnPtr& conn) {
-    m_AcceptorLoop->RunInLoop(bind(&TcpServer::RemoveOneConnInLoop, this, conn));
+void TcpServer::RemoveConn(const TcpConnPtr& conn) {
+    m_AcceptorLoop->RunInLoop(bind(&TcpServer::RemoveConnInLoop, this, conn));
 }
