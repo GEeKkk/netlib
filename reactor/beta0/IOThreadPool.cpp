@@ -40,6 +40,5 @@ EventLoop* IOThreadPool::GetNextLoop() {
             m_next = 0;
         }
     }
-
     return loop;
 }

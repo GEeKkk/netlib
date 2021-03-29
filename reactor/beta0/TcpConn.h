@@ -47,6 +47,10 @@ public:
         m_writeCompleteCallback = cb;
     }
 
+    EventLoop* GetLoop() {
+        return m_loop;
+    }
+
     std::string name() const {
         return m_name;
     }

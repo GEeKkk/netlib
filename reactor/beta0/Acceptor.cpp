@@ -4,6 +4,7 @@
 #include "SocketsOps.h"
 
 using namespace muduo;
+using namespace std;
 
 Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
     : m_loop(loop),
@@ -13,7 +14,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
 {
     m_AcceptSocket.setReuseAddr(true);
     m_AcceptSocket.bindAddress(addr);
-    m_AcceptChannel.SetRead(std::bind(&Acceptor::HandleRead, this));
+    m_AcceptChannel.SetRead(bind(&Acceptor::HandleRead, this));
 }
 
 void Acceptor::Listen() {
@@ -23,23 +24,15 @@ void Acceptor::Listen() {
     m_AcceptChannel.EnableRead();
 }
 
-bool Acceptor::IsListenning() const {
-    return m_listenning;
-}
-
-void Acceptor::SetConnHandler(const ConnHandler& hd) {
-    m_ConnHandler = hd;
-}
-
 void Acceptor::HandleRead() {
     m_loop->CheckInLoopThread();
+
     InetAddress peerAddr(0);
     int connfd = m_AcceptSocket.accept(&peerAddr);
     if (connfd >= 0) {
-        if (m_ConnHandler) {
-            m_ConnHandler(connfd, peerAddr);
+        if (m_ConnCallback) {
+            m_ConnCallback(connfd, peerAddr);
         } else {
-            printf("No ConnHnadler, close\n");
             close(connfd);
         }
     } 

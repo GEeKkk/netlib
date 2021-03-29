@@ -25,20 +25,6 @@ Channel::~Channel() {
     
 }
 
-void Channel::SetRead(const ReadEventCallback& cb) {
-    m_ReadCallback = cb;
-}
-void Channel::SetWrite(const EventCallback& cb) {
-    m_WriteCallback = cb;
-}
-void Channel::SetError(const EventCallback& cb) {
-    m_ErrorCallback = cb;
-}
-
-void Channel::SetClose(const EventCallback& cb) {
-    m_CloseCallback = cb;
-}
-
 void Channel::DisableAll() {
     m_events = kNone;
     Register();
@@ -61,30 +47,6 @@ void Channel::DisableWrite() {
 
 void Channel::Register() {
     m_eloop->UpdateChannel(this);
-}
-
-int Channel::fd() const {
-    return m_fd;
-}
-
-int Channel::events() const {
-    return m_events;
-}
-
-void Channel::set_revents(int r) {
-    m_revents = r;
-}
-
-bool Channel::IsNone() const {
-    return m_events == kNone;
-}
-
-int Channel::index() {
-    return m_index;
-}
-
-void Channel::set_index(int idx) {
-    m_index = idx;
 }
 
 void Channel::HandleEvent(Timestamp recvTime) {

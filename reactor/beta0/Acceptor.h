@@ -2,28 +2,33 @@
 #define ACCEPTOR_H
 
 #include <functional>
-#include "netlib/base/noncopyable.h"
 
 #include "Channel.h"
 #include "Socket.h"
 #include "InetAddress.h"
+#include "netlib/base/noncopyable.h"
 
 class EventLoop;
 
 class Acceptor : noncopyable
 {
 public:
-    using ConnHandler = std::function<void(int sockfd,
+    using ConnCallback = std::function<void(int sockfd,
                                            const muduo::InetAddress& addr)>;
 
 public:
     Acceptor(EventLoop* loop, const muduo::InetAddress& listenAddr);
     ~Acceptor() {}
 
-    void SetConnHandler(const ConnHandler& hd);
     void Listen();
 
-    bool IsListenning() const;
+    void SetConnCallback(const ConnCallback& cb) {
+        m_ConnCallback = cb;
+    }
+
+    bool IsListenning() const {
+        return m_listenning;
+    }
 
 private:
     void HandleRead();
@@ -31,7 +36,7 @@ private:
     EventLoop* m_loop;
     muduo::Socket m_AcceptSocket;
     Channel m_AcceptChannel;
-    ConnHandler m_ConnHandler;
+    ConnCallback m_ConnCallback;
     bool m_listenning;
 };
 

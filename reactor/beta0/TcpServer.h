@@ -8,6 +8,7 @@
 
 class Acceptor;
 class EventLoop;
+class IOThreadPool;
 
 class TcpServer : noncopyable
 {
@@ -28,13 +29,19 @@ public:
         m_writeCompleteCallback = cb;
     }
 
+    void SetThreadNum(int num) {
+        m_IoThreadPool->SetThreadNum(num);
+    }
+
     void HandleOneConn(int sockfd, const muduo::InetAddress& peerAddr);
     void RemoveOneConn(const TcpConnPtr& conn);
+    void RemoveOneConnInLoop(const TcpConnPtr& conn);
 private:
     using ConnMap = std::unordered_map<std::string, TcpConnPtr>;
 private:
-    EventLoop* m_loop;
+    EventLoop* m_AcceptorLoop;
     std::unique_ptr<Acceptor> m_acceptor;
+    std::unique_ptr<IOThreadPool> m_IoThreadPool;
 
     TcpConnCallback m_connCallback;
     TcpMsgCallback m_msgCallback;
@@ -42,7 +49,7 @@ private:
 
     bool m_started;
     int m_nextConnId;
-    std::string m_name;
+    const std::string m_name;
     ConnMap m_connMap;
 };
 

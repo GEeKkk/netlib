@@ -15,33 +15,55 @@ public:
 public:
     Channel(EventLoop* loop, int fd);
     ~Channel();
-    void HandleEvent(muduo::Timestamp recvTime);
 
-    void SetRead(const ReadEventCallback& cb);
-    void SetWrite(const EventCallback& cb);
-    void SetError(const EventCallback& cb);
-    void SetClose(const EventCallback& cb);
+    void HandleEvent(muduo::Timestamp recvTime);
 
     void EnableRead();
     void EnableWrite();
     void DisableWrite();
     void DisableAll();
 
+    void SetRead(const ReadEventCallback& cb) {
+        m_ReadCallback = cb;
+    }
+    void SetWrite(const EventCallback& cb) {
+        m_WriteCallback = cb;
+    }
+    void SetError(const EventCallback& cb) {
+        m_ErrorCallback = cb;
+    }
+
+    void SetClose(const EventCallback& cb) {
+        m_CloseCallback = cb;
+    }
+
     bool isWriting() const {
         return m_events & kWrite;
     }
 
-    int fd() const;
-    int events() const;
-    void set_revents(int revts);
+    int fd() const {
+        return m_fd;
+    }
 
-    int index();
-    void set_index(int idx);
+    int events() const {
+        return m_events;
+    }
 
-    bool IsNone() const;
+    void set_revents(int r) {
+        m_revents = r;
+    }
 
+    bool IsNone() const {
+        return m_events == kNone;
+    }
 
+    int index() {
+        return m_index;
+    }
 
+    void set_index(int idx) {
+        m_index = idx;
+    }
 private:
     void Register();
 private:

@@ -18,12 +18,13 @@ class IOThreadPool : noncopyable
 public:
     IOThreadPool(EventLoop* baseLoop);
     ~IOThreadPool();
-    void SetThreadNum(int num) {
-        m_ThreadNum = num;
-    }
 
     void Start();
     EventLoop* GetNextLoop();
+
+    void SetThreadNum(int num) {
+        m_ThreadNum = num;
+    }
 private:
     EventLoop* m_baseLoop;
     bool m_started;
