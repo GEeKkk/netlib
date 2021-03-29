@@ -3,7 +3,7 @@
 
 #include "TcpConn.h"
 #include "InetAddress.h"
-#include "netlib/base/noncopyable.h"
+#include "foxtail/base/noncopyable.h"
 
 #include <unordered_map>
 

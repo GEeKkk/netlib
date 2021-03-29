@@ -1,4 +1,4 @@
-#include "CurrentThread.h"
+#include "foxtail/base/CurrentThread.h"
 
 #include <type_traits>
 #include <sys/syscall.h>

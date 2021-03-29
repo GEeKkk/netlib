@@ -6,7 +6,7 @@
 #include <condition_variable>
 #include <memory>
 
-#include "netlib/base/noncopyable.h"
+#include "foxtail/base/noncopyable.h"
 
 class EventLoop;
 

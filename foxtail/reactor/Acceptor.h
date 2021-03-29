@@ -6,7 +6,7 @@
 #include "Channel.h"
 #include "Socket.h"
 #include "InetAddress.h"
-#include "netlib/base/noncopyable.h"
+#include "foxtail/base/noncopyable.h"
 
 class EventLoop;
 

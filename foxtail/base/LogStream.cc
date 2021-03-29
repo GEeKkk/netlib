@@ -1,4 +1,4 @@
-#include "LogStream.h"
+#include "foxtail/base/LogStream.h"
 
 #include <algorithm>
 #include <limits>

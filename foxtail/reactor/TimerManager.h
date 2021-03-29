@@ -1,8 +1,8 @@
 #ifndef TIMERMANAGER_H
 #define TIMERMANAGER_H
 
-#include "netlib/base/noncopyable.h"
-#include "netlib/base/Timestamp.h"
+#include "foxtail/base/noncopyable.h"
+#include "foxtail/base/Timestamp.h"
 #include "Channel.h"
 #include "Callbacks.h"
 #include "Timer.h"

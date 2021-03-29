@@ -4,8 +4,8 @@
 #include <vector>
 #include <unordered_map>
 
-#include "netlib/base/noncopyable.h"
-#include "netlib/base/Timestamp.h"
+#include "foxtail/base/noncopyable.h"
+#include "foxtail/base/Timestamp.h"
 
 class EventLoop;
 class Channel;

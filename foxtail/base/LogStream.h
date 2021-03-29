@@ -4,7 +4,8 @@
 #include <assert.h>
 #include <string.h>
 #include <string>
-#include "noncopyable.h"
+
+#include "foxtail/base/noncopyable.h"
 
 namespace muduo
 {

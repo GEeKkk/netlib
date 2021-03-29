@@ -1,8 +1,9 @@
 #ifndef MUDUO_BASE_LOGGING_H
 #define MUDUO_BASE_LOGGING_H
 
-#include "LogStream.h"
-#include "Timestamp.h"
+#include "foxtail/base/LogStream.h"
+#include "foxtail/base/Timestamp.h"
+
 #include <memory>
 
 namespace muduo

@@ -1,7 +1,5 @@
-#include "Logging.h"
-
-#include "Timestamp.h"
-#include "CurrentThread.h"
+#include "foxtail/base/Logging.h"
+#include "foxtail/base/CurrentThread.h"
 
 #include <errno.h>
 #include <stdio.h>

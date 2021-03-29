@@ -7,7 +7,7 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
 #include "SocketsOps.h"
-#include "netlib/base/Logging.h"
+#include "foxtail/base/Logging.h"
 
 #include <errno.h>
 #include <fcntl.h>

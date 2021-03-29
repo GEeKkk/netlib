@@ -4,7 +4,7 @@
 #include <memory>
 #include <functional>
 
-#include "netlib/base/Timestamp.h"
+#include "foxtail/base/Timestamp.h"
 
 class Buffer;
 class TcpConn;

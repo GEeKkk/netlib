@@ -3,8 +3,8 @@
 #include "Channel.h"
 #include "TimerManager.h"
 
-#include "netlib/base/CurrentThread.h"
-#include "netlib/base/Logging.h"
+#include "foxtail/base/CurrentThread.h"
+#include "foxtail/base/Logging.h"
 
 #include <poll.h>
 #include <signal.h>

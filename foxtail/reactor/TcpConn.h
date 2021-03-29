@@ -1,7 +1,7 @@
 #ifndef TCPCONN_H
 #define TCPCONN_H
 
-#include "netlib/base/noncopyable.h"
+#include "foxtail/base/noncopyable.h"
 #include <memory>
 
 #include "InetAddress.h"

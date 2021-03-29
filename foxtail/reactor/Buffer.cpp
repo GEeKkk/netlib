@@ -7,7 +7,7 @@
 
 #include "Buffer.h"
 #include "SocketsOps.h"
-#include "netlib/base/Logging.h"
+#include "foxtail/base/Logging.h"
 
 #include <errno.h>
 #include <memory.h>

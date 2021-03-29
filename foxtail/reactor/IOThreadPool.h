@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 
-#include "netlib/base/noncopyable.h"
+#include "foxtail/base/noncopyable.h"
 
 class EventLoop;
 class IOThread;
