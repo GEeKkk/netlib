@@ -4,6 +4,7 @@
 #include "TcpConn.h"
 #include "InetAddress.h"
 #include "netlib/base/noncopyable.h"
+
 #include <unordered_map>
 
 class Acceptor;
@@ -24,17 +25,11 @@ public:
     void SetMsgCallback(const TcpMsgCallback& cb) {
         m_msgCallback = cb;
     }
-
     void SetWriteCompleteCallback(const WriteCompleteCallback& cb) {
         m_writeCompleteCallback = cb;
     }
 
     void SetThreadNum(int num);
-
-    // void SetThreadNum(int num) {
-    //     m_IoThreadPool->SetThreadNum(num);
-    // }
-
     void HandleNewConn(int sockfd, const muduo::InetAddress& peerAddr);
     void RemoveConn(const TcpConnPtr& conn);
     void RemoveConnInLoop(const TcpConnPtr& conn);

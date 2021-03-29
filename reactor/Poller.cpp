@@ -8,7 +8,7 @@
 using namespace muduo;
 
 Poller::Poller(EventLoop* loop) 
-    : m_eloop(loop)
+    : m_loop(loop)
     {
     }
 
@@ -17,7 +17,6 @@ Timestamp Poller::Poll(int timeoutMs, std::vector<Channel*>& activeChans) {
     int num = poll(m_pollfds.data(), m_pollfds.size(), timeoutMs);
     Timestamp now(Timestamp::now());
     if (num > 0) {
-        // LOG_DEBUG << num << " event happended";
         FillActiveChannels(num, activeChans);
     } else if (num == 0) {
         LOG_DEBUG << "Nothing happended";

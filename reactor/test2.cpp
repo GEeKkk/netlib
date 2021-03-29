@@ -1,11 +1,16 @@
 #include "Channel.h"
 #include "EventLoop.h"
+#include "netlib/base/Timestamp.h"
+
 #include <sys/timerfd.h>
 #include <string.h>
 
+using namespace std;
+using namespace muduo;
+
 EventLoop* g_loop = nullptr;
 
-void Timeout() {
+void Timeout(muduo::Timestamp time) {
     printf("Timeout!\n");
     g_loop->Quit();
 }

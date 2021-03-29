@@ -21,7 +21,7 @@ public:
     void UpdateChannel(Channel* channel);
     void RemoveChannel(Channel* channel);
 private:
-    EventLoop* m_eloop;
+    EventLoop* m_loop;
     std::vector<struct pollfd> m_pollfds;
     std::unordered_map<int, Channel*> m_chanMap;
 };
