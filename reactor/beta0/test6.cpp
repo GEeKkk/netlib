@@ -1,6 +1,8 @@
 #include "TcpServer.h"
 #include "EventLoop.h"
 #include "InetAddress.h"
+#include "Buffer.h"
+#include "netlib/base/Timestamp.h"
 #include <stdio.h>
 
 void onConnection(const TcpConnPtr &conn)
@@ -10,6 +12,10 @@ void onConnection(const TcpConnPtr &conn)
         printf("onConnection(): new connection [%s] from %s\n",
                conn->name().c_str(),
                conn->peerAddress().toHostPort().c_str());
+        sleep(20);
+        conn->Send("Shit\n");
+        conn->Send("shit2\n");
+        conn->Shutdown();
     }
     else
     {
@@ -19,11 +25,13 @@ void onConnection(const TcpConnPtr &conn)
 }
 
 void onMessage(const TcpConnPtr &conn,
-               const char *data,
-               ssize_t len)
+               Buffer *buf,
+               muduo::Timestamp recvTime)
 {
     printf("onMessage(): received %zd bytes from connection [%s]\n",
-           len, conn->name().c_str());
+           buf->readableBytes(), conn->name().c_str());
+    
+    printf("data: %s, time %s\n",buf->retrieveAsString().c_str(), recvTime.toFormattedString().c_str());
 }
 
 int main()

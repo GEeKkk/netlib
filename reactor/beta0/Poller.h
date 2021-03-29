@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "netlib/base/noncopyable.h"
+#include "netlib/base/Timestamp.h"
 
 class EventLoop;
 class Channel;
@@ -15,7 +16,7 @@ class Poller : noncopyable
 public:
     Poller(EventLoop* loop);
 
-    void Poll(int timeoutMs, std::vector<Channel*>& activeChans);
+    muduo::Timestamp Poll(int timeoutMs, std::vector<Channel*>& activeChans);
     void FillActiveChannels(int numEvents, std::vector<Channel*>& activeChans);
     void UpdateChannel(Channel* channel);
     void RemoveChannel(Channel* channel);

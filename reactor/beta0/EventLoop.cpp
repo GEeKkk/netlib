@@ -7,10 +7,20 @@
 #include "netlib/base/Logging.h"
 
 #include <poll.h>
+#include <signal.h>
 #include <sys/eventfd.h>
 
 using namespace muduo;
 using namespace std;
+
+class IgnoreSigPipe{
+public:
+    IgnoreSigPipe() {
+        signal(SIGPIPE, SIG_IGN);
+    }
+};
+
+IgnoreSigPipe IgnoredObj;
 
 static int CreateEventfd() {
     int evfd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
@@ -59,9 +69,9 @@ void EventLoop::Loop() {
     m_quit = false;
     while (!m_quit) {
         m_activeChans.clear();
-        m_poller->Poll(kPollTimeout, m_activeChans);
+        Timestamp evtTime = m_poller->Poll(kPollTimeout, m_activeChans);
         for (auto& it : m_activeChans) {
-            it->HandleEvent();
+            it->HandleEvent(evtTime);
         }
         RunStoredFunctors();
     }

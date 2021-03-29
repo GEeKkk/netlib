@@ -2,11 +2,14 @@
 #include "EventLoop.h"
 #include "netlib/base/Logging.h"
 
+
 #include <poll.h>
 
 const int Channel::kNone = 0;
 const int Channel::kRead = POLLIN | POLLPRI;
 const int Channel::kWrite = POLLOUT;
+
+using namespace muduo;
 
 Channel::Channel(EventLoop* loop, int fd) 
     : m_eloop(loop),
@@ -22,7 +25,7 @@ Channel::~Channel() {
     
 }
 
-void Channel::SetRead(const EventCallback& cb) {
+void Channel::SetRead(const ReadEventCallback& cb) {
     m_ReadCallback = cb;
 }
 void Channel::SetWrite(const EventCallback& cb) {
@@ -43,6 +46,16 @@ void Channel::DisableAll() {
 
 void Channel::EnableRead() {
     m_events |= kRead;
+    Register();
+}
+
+void Channel::EnableWrite() {
+    m_events |= kWrite;
+    Register();
+}
+
+void Channel::DisableWrite() {
+    m_events &= ~kWrite;
     Register();
 }
 
@@ -74,14 +87,14 @@ void Channel::set_index(int idx) {
     m_index = idx;
 }
 
-void Channel::HandleEvent() {
+void Channel::HandleEvent(Timestamp recvTime) {
     m_eventHandling = true;
     if (m_revents & POLLNVAL) {
         LOG_WARN << "POLLNVAL";
     }
     if (m_revents & (POLLIN | POLLPRI | POLLRDHUP)) {
         if (m_ReadCallback) {
-            m_ReadCallback();
+            m_ReadCallback(recvTime);
         }
     }
     if (m_revents & POLLOUT) {

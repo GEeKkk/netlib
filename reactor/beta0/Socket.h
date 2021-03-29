@@ -11,7 +11,7 @@
 #ifndef MUDUO_NET_SOCKET_H
 #define MUDUO_NET_SOCKET_H
 
-#include "netlib/base/noncopyable.h"
+#include "netlib/base/Logging.h"
 
 namespace muduo
 {
@@ -49,6 +49,8 @@ class Socket : noncopyable
   /// Enable/disable SO_REUSEADDR
   ///
   void setReuseAddr(bool on);
+
+  void shutdownWrite();
 
  private:
   const int sockfd_;

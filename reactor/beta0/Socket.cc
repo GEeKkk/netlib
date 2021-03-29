@@ -19,7 +19,6 @@ using namespace muduo;
 
 Socket::~Socket()
 {
-  printf("~Socket fd = %d\n", sockfd_);
   sockets::close(sockfd_);
 }
 
@@ -51,5 +50,10 @@ void Socket::setReuseAddr(bool on)
   ::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR,
                &optval, sizeof optval);
   // FIXME CHECK
+}
+
+void Socket::shutdownWrite()
+{
+  sockets::shutdownWrite(sockfd_);
 }
 

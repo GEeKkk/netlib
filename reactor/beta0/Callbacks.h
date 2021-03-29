@@ -4,11 +4,15 @@
 #include <memory>
 #include <functional>
 
+#include "netlib/base/Timestamp.h"
+
+class Buffer;
 class TcpConn;
 using TcpConnPtr = std::shared_ptr<TcpConn>;
 using TcpConnCallback = std::function<void(const TcpConnPtr&)>;
-using TcpMsgCallback = std::function<void(const TcpConnPtr&, const char* data, ssize_t len)>;
+using TcpMsgCallback = std::function<void(const TcpConnPtr&, Buffer* data, muduo::Timestamp)>;
 using TcpCloseCallback = std::function<void(const TcpConnPtr&)>;
+using WriteCompleteCallback = std::function<void(const TcpConnPtr&)>;
 
 using TimerCallback = std::function<void()>;
 

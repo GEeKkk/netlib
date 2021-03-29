@@ -2,6 +2,7 @@
 #define CHANNEL_H
 
 #include "netlib/base/noncopyable.h"
+#include "netlib/base/Timestamp.h"
 #include <functional>
 
 class EventLoop;
@@ -10,17 +11,25 @@ class Channel : noncopyable
 {
 public:
     using EventCallback = std::function<void()>;
+    using ReadEventCallback = std::function<void(muduo::Timestamp)>;
 public:
     Channel(EventLoop* loop, int fd);
     ~Channel();
-    void HandleEvent();
+    void HandleEvent(muduo::Timestamp recvTime);
 
-    void SetRead(const EventCallback& cb);
+    void SetRead(const ReadEventCallback& cb);
     void SetWrite(const EventCallback& cb);
     void SetError(const EventCallback& cb);
     void SetClose(const EventCallback& cb);
 
     void EnableRead();
+    void EnableWrite();
+    void DisableWrite();
+    void DisableAll();
+
+    bool isWriting() const {
+        return m_events & kWrite;
+    }
 
     int fd() const;
     int events() const;
@@ -31,12 +40,12 @@ public:
 
     bool IsNone() const;
 
-    void DisableAll();
+
 
 private:
     void Register();
 private:
-    EventCallback m_ReadCallback;
+    ReadEventCallback m_ReadCallback;
     EventCallback m_WriteCallback;
     EventCallback m_ErrorCallback;
     EventCallback m_CloseCallback;

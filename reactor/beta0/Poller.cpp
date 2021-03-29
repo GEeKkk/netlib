@@ -5,6 +5,7 @@
 #include "netlib/base/Logging.h"
 
 #include <poll.h>
+using namespace muduo;
 
 Poller::Poller(EventLoop* loop) 
     : m_eloop(loop)
@@ -12,8 +13,9 @@ Poller::Poller(EventLoop* loop)
     }
 
 
-void Poller::Poll(int timeoutMs, std::vector<Channel*>& activeChans) {
+Timestamp Poller::Poll(int timeoutMs, std::vector<Channel*>& activeChans) {
     int num = poll(m_pollfds.data(), m_pollfds.size(), timeoutMs);
+    Timestamp now(Timestamp::now());
     if (num > 0) {
         // LOG_DEBUG << num << " event happended";
         FillActiveChannels(num, activeChans);
@@ -22,6 +24,7 @@ void Poller::Poll(int timeoutMs, std::vector<Channel*>& activeChans) {
     } else {
         LOG_SYSERR << "Poll";
     }
+    return now;
 }
 
 void Poller::FillActiveChannels(int num, std::vector<Channel*>& activeChans) {

@@ -1,5 +1,7 @@
-LIB_SRC = EventLoop.cpp Channel.cpp Poller.cpp Acceptor.cpp Timer.cpp TimerManager.cpp Socket.cc SocketsOps.cc InetAddress.cc TcpServer.cpp TcpConn.cpp
-BINARIES = test6
+LIB_SRC = EventLoop.cpp Channel.cpp Poller.cpp Acceptor.cpp IOThread.cpp\
+		Timer.cpp TimerManager.cpp Buffer.cpp Socket.cc SocketsOps.cc InetAddress.cc TcpServer.cpp TcpConn.cpp \
+
+BINARIES = test8
 
 all: $(BINARIES)
 
@@ -12,3 +14,5 @@ test3: test3.cpp
 test4: test4.cpp
 test5: test5.cpp
 test6: test6.cpp
+test7: test7.cpp
+test8: test8.cpp
