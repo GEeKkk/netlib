@@ -26,7 +26,6 @@ void Acceptor::Listen() {
 
 void Acceptor::HandleRead() {
     m_loop->CheckInLoopThread();
-
     InetAddress peerAddr(0);
     int connfd = m_AcceptSocket.accept(&peerAddr);
     if (connfd >= 0) {
