@@ -12,10 +12,11 @@
 
 class Channel;
 class Poller;
-class TimerManager;
 
 class EventLoop : noncopyable
 {
+public:
+    using Functor = std::function<void()>;
 public:
     EventLoop();
     ~EventLoop();
@@ -29,13 +30,9 @@ public:
     void CheckInLoopThread();
     bool IsInLoopThread() const;
 
-    using Functor = std::function<void()>;
     void RunInLoop(const Functor& cb);
     void Stored(const Functor& cb);
 
-    void RunAt(const muduo::Timestamp& time, const TimerCallback& cb);
-    void RunAfter(double delay, const TimerCallback& cb);
-    void RunEvery(double interval, const TimerCallback& cb);
 private:
     void AbortNotInLoopThread();
     void HandleRead();
@@ -46,7 +43,6 @@ private:
     const pid_t m_threadId; // 创建了EventLoop对象的线程是IO线程, 主要功能是运行Loop()
     bool m_quit;
     std::unique_ptr<Poller> m_poller;
-    std::unique_ptr<TimerManager> m_timerManger;
     std::vector<Channel*> m_activeChans;
     int m_wakeupFd;
     bool m_callPending;

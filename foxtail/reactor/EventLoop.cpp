@@ -1,7 +1,6 @@
 #include "EventLoop.h"
 #include "Poller.h"
 #include "Channel.h"
-#include "TimerManager.h"
 
 #include "foxtail/base/CurrentThread.h"
 #include "foxtail/base/Logging.h"
@@ -38,17 +37,16 @@ EventLoop::EventLoop()
           m_threadId(CurrentThread::tid()),
           m_quit(false),
           m_poller(make_unique<Poller>(this)),
-          m_timerManger(make_unique<TimerManager>(this)),
           m_wakeupFd(CreateEventfd()),
           m_callPending(false),
           m_wakeupChan(make_unique<Channel>(this, m_wakeupFd))
 {
-    LOG_DEBUG << "Created loop [" << this << "] in thread " << m_threadId;
+    LOG_DEBUG << "[thread " << m_threadId << "] " << "create loop (" << this << ")";
     /// 每个线程只能有一个eventloop, 
     /// 创建之前需要检查是否已经创建了其他loop对象
     if (t_loopInCurrentThread) {
-        LOG_FATAL << "Another EventLoop [" << t_loopInCurrentThread 
-                  << "] exists in this thread (" << m_threadId << ")";
+        LOG_FATAL << "another loop (" << t_loopInCurrentThread 
+                  << ") exists in thread [" << m_threadId << "]";
     } else {
         t_loopInCurrentThread = this;
     }
@@ -75,7 +73,7 @@ void EventLoop::Loop() {
         }
         RunStoredFunctors();
     }
-    LOG_DEBUG << "[" << this << "] STOP!";
+    LOG_DEBUG << "(" << this << ") Stop!";
     m_looping = false;
 }
 
@@ -107,25 +105,11 @@ bool EventLoop::IsInLoopThread() const {
 }
 
 void EventLoop::AbortNotInLoopThread() {
-    LOG_FATAL << "EventLoop Abort. Created in thread(" 
+    LOG_FATAL << "EventLoop must run in IO thread [" 
               << m_threadId 
-              << "), but current thread is (" 
+              << "]. Current thread [" 
               << CurrentThread::tid() 
-              << ")";
-}
-
-void EventLoop::RunAt(const Timestamp& time, const TimerCallback& cb) {
-    m_timerManger->AddTimer(cb, time, 0.0);
-}
-
-void EventLoop::RunAfter(double delay, const TimerCallback& cb) {
-    Timestamp time(addTime(Timestamp::now(), delay));
-    RunAt(time, cb);
-}
-
-void EventLoop::RunEvery(double interval, const TimerCallback& cb) {
-    Timestamp time(addTime(Timestamp::now(), interval));
-    m_timerManger->AddTimer(cb, time, interval);
+              << "]. Abort.";
 }
 
 void EventLoop::WakeUp() {

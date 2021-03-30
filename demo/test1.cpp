@@ -1,17 +1,18 @@
-#include "EventLoop.h"
+#include <foxtail/reactor/EventLoop.h>
 #include <thread>
+
+using namespace std;
 
 EventLoop *g_loop = nullptr;
 
-void threadFunc()
-{
+// 在别的线程调用EventLoop
+void Tester() {
     g_loop->Loop();
 }
 
-int main()
-{
+int main() {
     EventLoop loop;
     g_loop = &loop;
-    std::thread th(threadFunc);
+    thread th(Tester);
     th.join();
 }

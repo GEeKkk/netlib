@@ -1,7 +1,6 @@
 #ifndef CURRENTTHREAD_H
 #define CURRENTTHREAD_H
 
-
 namespace CurrentThread
 {
     // internal
@@ -9,13 +8,13 @@ namespace CurrentThread
     extern __thread char t_tidString[32];
     extern __thread int t_tidStringLength;
     extern __thread const char *t_threadName;
-    void cacheTid();
+    void CacheTid();
 
     inline int tid()
     {
         if (__builtin_expect(t_cachedTid == 0, 0))
         {
-            cacheTid();
+            CacheTid();
         }
         return t_cachedTid;
     }
@@ -35,7 +34,7 @@ namespace CurrentThread
         return t_threadName;
     }
 
-    bool isMainThread();
+    bool IsMainThread();
 
     // void sleepUsec(int64_t usec); // for testing
 

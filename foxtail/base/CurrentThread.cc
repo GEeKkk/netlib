@@ -19,15 +19,16 @@ namespace CurrentThread
         return static_cast<pid_t>(::syscall(SYS_gettid));
     }
 
-    void cacheTid()
+    void CacheTid()
     {
         if (t_cachedTid == 0)
         {
-            t_cachedTid = GetTid();
+            // t_cachedTid = GetTid();
+            t_cachedTid = gettid();
             t_tidStringLength = snprintf(t_tidString, sizeof(t_tidString), "%5d ", t_cachedTid);
         }
     }
-    bool isMainThread()
+    bool IsMainThread()
     {
         return tid() == ::getpid();
     }

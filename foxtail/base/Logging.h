@@ -42,7 +42,8 @@ namespace muduo
         class Impl
         {
         public:
-            typedef Logger::LogLevel LogLevel;
+            // typedef Logger::LogLevel LogLevel;
+            using LogLevel = Logger::LogLevel;
             Impl(LogLevel level, int old_errno, const char *file, int line);
             void formatTime();
             void finish();

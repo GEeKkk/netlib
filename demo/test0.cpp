@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <thread>
 
+#include <functional>
+
+// #include "bench.h"
+
 using namespace std;
 
 void Tester()
@@ -15,7 +19,10 @@ void Tester()
 
 int main()
 {
-    printf("[main] pid = %d,tid = %d\n", getpid(), CurrentThread::tid());
+    // Bench::Run(bind(SysCall), 1000000, FuncName(SysCall));
+    // Bench::Run(bind(UserCall), 1000000, FuncName(UserCall));
+    // Bench::Run(bind(Call), 1000000, FuncName(Call));
+    printf("[main] pid = %d, tid = %d\n", getpid(), CurrentThread::tid());
 
     EventLoop loop;
     thread th(Tester);
