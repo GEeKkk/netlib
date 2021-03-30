@@ -10,5 +10,5 @@ target_link_libraries(test2 base reactor)
 add_executable(test3 test3.cpp)
 target_link_libraries(test3 base reactor)
 
-add_executable(test4 test4.cpp)
-target_link_libraries(test4 base reactor)
+add_executable(echo echo/echo.cpp echo/server.cpp)
+target_link_libraries(echo base reactor)
