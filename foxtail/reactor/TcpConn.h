@@ -59,6 +59,10 @@ public:
         return m_peerAddr;
     }
 
+    muduo::InetAddress localAddress() const {
+        return m_localAddr;
+    }
+
     bool Connected() const {
         return m_state == kConnected;
     }

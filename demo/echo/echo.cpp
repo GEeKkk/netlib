@@ -18,9 +18,7 @@ void EchoServer::Start() {
 
 void EchoServer::OnConn(const TcpConnPtr& conn)
 {
-  LOG_DEBUG << "EchoServer - " << conn->peerAddress().toHostPort() << " -> "
-           << "local is "
-           << (conn->Connected() ? "UP" : "DOWN");
+  LOG_DEBUG << conn->peerAddress().toHostPort() << " -> " << conn->localAddress().toHostPort() << (conn->Connected() ? " UP" : " DOWN");
 }
 
 void EchoServer::OnMessage(const TcpConnPtr& conn,
@@ -28,7 +26,7 @@ void EchoServer::OnMessage(const TcpConnPtr& conn,
                            muduo::Timestamp time)
 {
   string msg(buf->retrieveAsString());
-  LOG_DEBUG << conn->name() << " echo " << msg.size() << " bytes, "
-           << "data received at " << time.toFormattedString();
+  // LOG_DEBUG << conn->name() << " echo " << msg.size() << " bytes, "
+  //          << "data received at " << time.toFormattedString();
   conn->Send(msg);
 }
