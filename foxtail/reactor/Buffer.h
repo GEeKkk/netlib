@@ -140,6 +140,21 @@ class Buffer
    std::copy(peek(), peek()+readableBytes(), buf.begin()+kCheapPrepend);
    buf.swap(buffer_);
   }
+  const char* findCRLF() const
+  {
+    // FIXME: replace with memmem()?
+    const char* crlf = std::search(peek(), beginWrite(), kCRLF, kCRLF+2);
+    return crlf == beginWrite() ? NULL : crlf;
+  }
+
+  const char* findCRLF(const char* start) const
+  {
+    assert(peek() <= start);
+    assert(start <= beginWrite());
+    // FIXME: replace with memmem()?
+    const char* crlf = std::search(start, beginWrite(), kCRLF, kCRLF+2);
+    return crlf == beginWrite() ? NULL : crlf;
+  }
 
   /// Read data directly into buffer.
   ///
@@ -179,6 +194,8 @@ class Buffer
   std::vector<char> buffer_;
   size_t readerIndex_;
   size_t writerIndex_;
+
+  static const char kCRLF[];
 };
 
 #endif  // MUDUO_NET_BUFFER_H

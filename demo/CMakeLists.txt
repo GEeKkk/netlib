@@ -12,3 +12,6 @@ target_link_libraries(test3 base reactor)
 
 add_executable(echo echo/echo.cpp echo/server.cpp)
 target_link_libraries(echo base reactor)
+
+add_executable(sudoku sudoku/server.cpp sudoku/sudoku.cpp)
+target_link_libraries(sudoku base reactor)

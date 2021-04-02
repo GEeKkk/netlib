@@ -11,6 +11,8 @@ set(reactor_src
   SocketsOps.cc
   TcpConn.cpp
   TcpServer.cpp
+  Timer.cpp
+  TimerManager.cpp
   )
 
 set(HEADERS

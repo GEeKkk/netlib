@@ -14,6 +14,7 @@ using TcpMsgCallback = std::function<void(const TcpConnPtr&, Buffer* data, muduo
 using TcpCloseCallback = std::function<void(const TcpConnPtr&)>;
 using WriteCompleteCallback = std::function<void(const TcpConnPtr&)>;
 
-// using TimerCallback = std::function<void()>;
+using TimerCallback = std::function<void()>;
+using TimerId = int64_t;
 
 #endif // CALLBACKS_H

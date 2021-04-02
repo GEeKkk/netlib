@@ -1,6 +1,7 @@
 #include "EventLoop.h"
 #include "Poller.h"
 #include "Channel.h"
+#include "TimerManager.h"
 
 #include "foxtail/base/CurrentThread.h"
 #include "foxtail/base/Logging.h"
@@ -37,6 +38,7 @@ EventLoop::EventLoop()
           m_threadId(CurrentThread::tid()),
           m_quit(false),
           m_poller(make_unique<Poller>(this)),
+          m_timerManager(make_unique<TimerQueue>(this)),
           m_wakeupFd(CreateEventfd()),
           m_callPending(false),
           m_wakeupChan(make_unique<Channel>(this, m_wakeupFd))
@@ -156,4 +158,17 @@ void EventLoop::RunStoredFunctors() {
     }
 
     m_callPending = false;
+}
+
+
+TimerId EventLoop::RunAt(Timestamp& time, const TimerCallback& cb) {
+    return m_timerManager->Add(cb, time, 0.0);
+}
+TimerId EventLoop::RunAfter(double delay, const TimerCallback& cb) {
+    Timestamp time(addTime(Timestamp::now(), delay));
+    return RunAt(time, cb);
+}
+TimerId EventLoop::RunEvery(double interval, const TimerCallback& cb) {
+    Timestamp time(addTime(Timestamp::now(), interval));
+    return m_timerManager->Add(cb, time, interval);
 }
