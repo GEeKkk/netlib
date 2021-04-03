@@ -64,6 +64,11 @@ namespace muduo
         ///
         static Timestamp invalid();
 
+        int64_t Milliseconds();
+        double Seconds();
+
+        static Timestamp Since(Timestamp t);
+
         static const int kMicroSecondsPerSecond = 1000 * 1000;
 
     private:

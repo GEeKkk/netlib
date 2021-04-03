@@ -40,7 +40,7 @@ public:
         m_index = index;
     }
 
-    const TimerId id() const {
+    TimerId id() const {
         return m_id;
     }
 private:

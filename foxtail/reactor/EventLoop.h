@@ -38,6 +38,7 @@ public:
     TimerId RunAt(muduo::Timestamp& time, const TimerCallback& cb);
     TimerId RunAfter(double delay, const TimerCallback& cb);
     TimerId RunEvery(double interval, const TimerCallback& cb);
+    void StopTimer(TimerId id);
 private:
     void AbortNotInLoopThread();
     void HandleRead();

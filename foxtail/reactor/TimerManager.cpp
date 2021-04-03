@@ -94,7 +94,7 @@ vector<shared_ptr<Timer>> TimerQueue::expired(Timestamp now) {
     vector<shared_ptr<Timer>> expired;
     while (!m_heap.empty() && m_heap[0]->endTime() < now) {
         size_t index = m_heap[0]->index();
-        expired.emplace_back(move(m_heap[0]));
+        expired.emplace_back(m_heap[0]);
         RemoveFromHeap(index);
     }
     return expired;
@@ -163,6 +163,7 @@ bool TimerQueue::insert(shared_ptr<Timer>& timer) {
     }
     m_idMap[timer->id()] = timer;
     m_heap.push_back(move(timer));
+    up(m_heap.size() - 1);
     return isEarliest;
 }
 

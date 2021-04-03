@@ -56,3 +56,18 @@ Timestamp Timestamp::invalid()
 {
     return Timestamp();
 }
+
+Timestamp Timestamp::Since(Timestamp t) {
+    int64_t duration = now().microSecondsSinceEpoch() - t.microSecondsSinceEpoch();
+    return Timestamp(duration);
+}
+
+double Timestamp::Seconds() {
+    return static_cast<double>(microSecondsSinceEpoch_) / kMicroSecondsPerSecond;
+}
+
+int64_t Timestamp::Milliseconds() {
+    return Seconds() * 1000;
+}
+
+

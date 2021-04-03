@@ -172,3 +172,7 @@ TimerId EventLoop::RunEvery(double interval, const TimerCallback& cb) {
     Timestamp time(addTime(Timestamp::now(), interval));
     return m_timerManager->Add(cb, time, interval);
 }
+
+void EventLoop::StopTimer(TimerId id) {
+    m_timerManager->Stop(id);
+}
