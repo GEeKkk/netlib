@@ -89,11 +89,9 @@ namespace muduo
 
     class LogStream : noncopyable
     {
-        // typedef LogStream self;
         using self = LogStream;
 
     public:
-        // typedef detail::FixedBuffer<detail::kSmallBuffer> Buffer;
         using Buffer = detail::FixedBuffer<detail::kSmallBuffer>;
 
         self &operator<<(bool v)

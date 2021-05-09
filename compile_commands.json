@@ -1,0 +1,132 @@
+[
+{
+  "directory": "/home/lu/netlib/build/foxtail/base",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/base.dir/CurrentThread.cc.o -c /home/lu/netlib/foxtail/base/CurrentThread.cc",
+  "file": "/home/lu/netlib/foxtail/base/CurrentThread.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/base",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/base.dir/Logging.cc.o -c /home/lu/netlib/foxtail/base/Logging.cc",
+  "file": "/home/lu/netlib/foxtail/base/Logging.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/base",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/base.dir/LogStream.cc.o -c /home/lu/netlib/foxtail/base/LogStream.cc",
+  "file": "/home/lu/netlib/foxtail/base/LogStream.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/base",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/base.dir/Timestamp.cc.o -c /home/lu/netlib/foxtail/base/Timestamp.cc",
+  "file": "/home/lu/netlib/foxtail/base/Timestamp.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/EventLoop.cpp.o -c /home/lu/netlib/foxtail/reactor/EventLoop.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/EventLoop.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Channel.cpp.o -c /home/lu/netlib/foxtail/reactor/Channel.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/Channel.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Poller.cpp.o -c /home/lu/netlib/foxtail/reactor/Poller.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/Poller.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Acceptor.cpp.o -c /home/lu/netlib/foxtail/reactor/Acceptor.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/Acceptor.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Buffer.cpp.o -c /home/lu/netlib/foxtail/reactor/Buffer.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/Buffer.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/InetAddress.cc.o -c /home/lu/netlib/foxtail/reactor/InetAddress.cc",
+  "file": "/home/lu/netlib/foxtail/reactor/InetAddress.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/IOThread.cpp.o -c /home/lu/netlib/foxtail/reactor/IOThread.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/IOThread.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/IOThreadPool.cpp.o -c /home/lu/netlib/foxtail/reactor/IOThreadPool.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/IOThreadPool.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Socket.cc.o -c /home/lu/netlib/foxtail/reactor/Socket.cc",
+  "file": "/home/lu/netlib/foxtail/reactor/Socket.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/SocketsOps.cc.o -c /home/lu/netlib/foxtail/reactor/SocketsOps.cc",
+  "file": "/home/lu/netlib/foxtail/reactor/SocketsOps.cc"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/TcpConn.cpp.o -c /home/lu/netlib/foxtail/reactor/TcpConn.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/TcpConn.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/TcpServer.cpp.o -c /home/lu/netlib/foxtail/reactor/TcpServer.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/TcpServer.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/Timer.cpp.o -c /home/lu/netlib/foxtail/reactor/Timer.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/Timer.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/foxtail/reactor",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/reactor.dir/TimerManager.cpp.o -c /home/lu/netlib/foxtail/reactor/TimerManager.cpp",
+  "file": "/home/lu/netlib/foxtail/reactor/TimerManager.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/sudoku.dir/sudoku/server.cpp.o -c /home/lu/netlib/demo/sudoku/server.cpp",
+  "file": "/home/lu/netlib/demo/sudoku/server.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/sudoku.dir/sudoku/sudoku.cpp.o -c /home/lu/netlib/demo/sudoku/sudoku.cpp",
+  "file": "/home/lu/netlib/demo/sudoku/sudoku.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/echo.dir/echo/echo.cpp.o -c /home/lu/netlib/demo/echo/echo.cpp",
+  "file": "/home/lu/netlib/demo/echo/echo.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/echo.dir/echo/server.cpp.o -c /home/lu/netlib/demo/echo/server.cpp",
+  "file": "/home/lu/netlib/demo/echo/server.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/test3.dir/test3.cpp.o -c /home/lu/netlib/demo/test3.cpp",
+  "file": "/home/lu/netlib/demo/test3.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/test2.dir/test2.cpp.o -c /home/lu/netlib/demo/test2.cpp",
+  "file": "/home/lu/netlib/demo/test2.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/test1.dir/test1.cpp.o -c /home/lu/netlib/demo/test1.cpp",
+  "file": "/home/lu/netlib/demo/test1.cpp"
+},
+{
+  "directory": "/home/lu/netlib/build/demo",
+  "command": "/bin/g++-9   -I/home/lu/netlib  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-parameter -Wold-style-cast -Woverloaded-virtual -Wpointer-arith -Wshadow -Wwrite-strings -march=native -std=c++17 -rdynamic -O0   -o CMakeFiles/test0.dir/test0.cpp.o -c /home/lu/netlib/demo/test0.cpp",
+  "file": "/home/lu/netlib/demo/test0.cpp"
+}
+]
